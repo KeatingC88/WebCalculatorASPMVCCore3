@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Web Calculator (MVC)";
+}
+<style>
+    /*Default CSS for Larger Viewports (Why doesn't this work in Calculator-keypad.css File????)*/    
+    @@media (min-width: 768px) {
+        #calculator-card-body {max-height: 236px !important;}
+        #calculator-enter-btn {height: 95px !important;}
+        #calculator-zero-btn {width: 94px !important;bottom: 48px !important;}
+    }
+</style>
+
+<div class="row ml-2 justify-content-md-center">
+    <form>
+
+        <div class="card-header p-0">
+            
+            <div class="form-group">
+                <input class="form-control" type="text" placeholder="" readonly>
+            </div>
+            
+
+        </div>        
+        
+        <div class="card" id="calculator-keypad-parent-card">
+            <div class="card-body p-0" id="calculator-card-body">
+                <!--Child Rows and Columns of the Calculator Keypad-->
+                <div class="row">
+                    <div class="col p-0">
+                        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
+                            <button type="button" class="btn btn-secondary" onclick="calculator.clearDisplay()">C</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(7)">7</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(4)">4</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(1)" id="calculator-keypad-one-btn">1</button>
+                        </div>
+                    </div>
+                    <div class="col p-0">
+                        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key('/')">/</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(8)">8</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(5)">5</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(2)">2</button>
+                        </div>
+                    </div>
+                    <div class="col p-0">
+                        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key('*')">*</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(9)">9</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(6)">6</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(3)">3</button>
+                            <button type="button" class="btn btn-secondary btn-lg" onclick="calculator.key('.')" id="calculator-decimal-btn">.</button>
+                        </div>
+                    </div>
+                    <div class="col p-0">
+                        <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key('-')">-</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key('+')" id="calculator-addition-btn">+</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key('=')" id="calculator-enter-btn">E</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="btn btn-secondary btn-lg" onclick="calculator.key(0)" id="calculator-zero-btn">0</button>
+                </div>
+                <!--End Child Rows-->
+
+            </div><!--Parent Card-Body-->
+        </div><!--Parent Card-->
+    </form>
+</div><!--Parent Row-->
