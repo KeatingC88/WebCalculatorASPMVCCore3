@@ -15,35 +15,50 @@
             //Save the Key to the KeysPressed Object.
             this.KeysPressed.push(value);
             //Retrieve the Numbers after Assembling the String of Keys
-            var numbers = this.assembleStringofKeys();
-            console.log(numbers);
+            this.assembleStringofKeys();
+            console.log("KeysPressed: " + this.KeysPressed);
+            
         }
 
         if (value === ".") {
             //Its a Decimal
             console.log("It's a Decimal: " + value);
-            //if (first element in KeysPressed is a Decimal -- Apply the 0.) { }
+            this.assembleStringofKeys();
+            this.decimalManager();
             //if (there is a decimal in any KeysPressed elements, disable the decimal button) { }
             //Else Append the Decimal to KeysPressed, but do not assemble
-            this.KeysPressed.push(value);
-            console.log("KeysPressed: " + this.KeysPressed);
-            //this.assembleStringofKeys();
 
-            console.log("KeysRecorder: " + this.KeysRecorder);
         }
 
         if (this.arithmeticOperatorDetector(value) !== false) {
             //Its an Operator
             console.log("It's an Operator: " + value);
-            //Save Current KeysPressed???
-            //Clear the Previous KeysPressed???
-            //Get Last Key ?????
-            //Save the Operator in Keys.Pressed to KeyRecorder.
-            this.KeysPressed.push(value);
-            console.log("KeysPressed: " + this.KeysPressed);
-            //this.assembleStringofKeys();
+            //Get Current KeysPressed
+            var numbers = this.assembleStringofKeys();
+            //Save Current KeysPressed
+            this.KeysRecorder.push(numbers);            
+            //Save Current Operator
+            this.KeysRecorder.push(value);
+            //Clear the Previous KeysPressed
+            this.KeysPressed = [];            
+            console.log("KeysRecorder: " + this.KeysRecorder);
 
-            //console.log("KeysRecorder: " + this.KeysRecorder);
+        }
+
+        if (value === "=") {
+            console.log("Calculate");
+            //Get the Assemble Last set of Keys Inputted by the User in the KeysPressed Object.
+            var lastSetOfNumbers = this.assembleStringofKeys();
+            //Add KeysPressed to the KeysRecorder Object.
+            this.KeysRecorder.push(lastSetOfNumbers);
+            console.log(this.KeysRecorder);
+            //Calculate the String...
+            //Calculate the KeysRecorder Method();
+            //Clear the KeysRecorder = [];
+            //Clear Current Keys Pressed
+            this.KeysPressed = [];
+            console.log("KeysPressed (On Calculate): " + this.KeysPressed);
+            
         }
 
     }
@@ -54,13 +69,36 @@
         return res;        
     }
 
-    decimalManager() {
+    decimalManager(value) {
+        
+        //if (first element in KeysPressed is a Decimal -- Apply the 0.) { }
+        var lastKeyPress = this.getLastKeysPressed();
+        if (lastKeyPress === undefined || Object.keys(this.KeysPressed).length === 0) {
+            //If Object is empty, apply this push to the Array.
+            this.KeysPressed.push("0.");
+        }
 
+        var string = this.assembleStringofKeys();
+        var find = string.includes(".");
+        this.KeysPressed.push(".");
+        if (find === true) {
+            console.log("Find: " + find);
+        }
+
+            //if (there is a decimal in any KeysPressed elements, disable the decimal button) { }
+
+            //Else Append the Decimal to KeysPressed, but do not assemble
+    }
+
+    getLastKeysPressed() {
+        var lastItem = this.KeysPressed[this.KeysPressed.length - 1];
+        console.log("Last KeyPressed: " + lastItem);
+        return lastItem;
     }
 
     getLastRecordedKey() {
         var lastItem = this.KeysRecorder[this.KeysRecorder.length - 1];
-        //console.log("Last Key: " + lastItem);
+        //console.log("Last KeyRecorder: " + lastItem);
         return lastItem;
     }
 
@@ -77,9 +115,6 @@
                 break;
             case '/':
                 return '/';
-                break;
-            case '=':
-                return '=';
                 break;
             default:
                 return false;
