@@ -15,19 +15,17 @@
             //Save the Key to the KeysPressed Object.
             this.KeysPressed.push(value);
             //Retrieve the Numbers after Assembling the String of Keys
-            this.assembleStringofKeys();
-            console.log("KeysPressed: " + this.KeysPressed);
-            
+            this.DisplayString = this.assembleStringofKeys();
+            //console.log("KeysPressed: " + this.KeysPressed);
+            this.display();            
         }
 
         if (value === ".") {
             //Its a Decimal
-            console.log("It's a Decimal: " + value);
-            this.assembleStringofKeys();
+            //console.log("It's a Decimal: " + value);
             this.decimalManager();
-            //if (there is a decimal in any KeysPressed elements, disable the decimal button) { }
-            //Else Append the Decimal to KeysPressed, but do not assemble
-
+            this.DisplayString = this.assembleStringofKeys();
+            this.display();
         }
 
         if (this.arithmeticOperatorDetector(value) !== false) {
@@ -41,8 +39,8 @@
             this.KeysRecorder.push(value);
             //Clear the Previous KeysPressed
             this.KeysPressed = [];            
-            console.log("KeysRecorder: " + this.KeysRecorder);
-
+            //console.log("KeysRecorder: " + this.KeysRecorder);
+            //How to Display this?
         }
 
         if (value === "=") {
@@ -65,34 +63,35 @@
 
     assembleStringofKeys() {
         var res = this.KeysPressed.join("");
-        console.log("Assemble String of Keys: " + res);
+        //console.log("Assemble String of Keys: " + res);
         return res;        
     }
 
-    decimalManager(value) {
+    decimalManager() {
         
         //if (first element in KeysPressed is a Decimal -- Apply the 0.) { }
         var lastKeyPress = this.getLastKeysPressed();
+        //
         if (lastKeyPress === undefined || Object.keys(this.KeysPressed).length === 0) {
             //If Object is empty, apply this push to the Array.
             this.KeysPressed.push("0.");
         }
-
+        //if (there is a decimal in any KeysPressed elements, disable the decimal button) { }
         var string = this.assembleStringofKeys();
-        var find = string.includes(".");
-        this.KeysPressed.push(".");
-        if (find === true) {
-            console.log("Find: " + find);
+        var find = string.includes(".");        
+        if (find === false) {
+            //console.log("Find: " + find);
+            //Either 1 Decimal or None was Found
+            this.KeysPressed.push(".");
+        } else {
+            //console.log("Find: " + find);
+            //Deimcal was Found -- do nothing to avoid doubling decimals in strings.
         }
-
-            //if (there is a decimal in any KeysPressed elements, disable the decimal button) { }
-
-            //Else Append the Decimal to KeysPressed, but do not assemble
     }
 
     getLastKeysPressed() {
         var lastItem = this.KeysPressed[this.KeysPressed.length - 1];
-        console.log("Last KeyPressed: " + lastItem);
+        //console.log("Last KeyPressed: " + lastItem);
         return lastItem;
     }
 
@@ -120,6 +119,16 @@
                 return false;
                 break;
         }
+    }
+
+    clearDisplay() {
+        this.KeysPressed = [];
+        this.KeysRecorder = [];
+        document.getElementsByTagName("input")[0].setAttribute("placeholder", "");
+    }
+
+    display() {
+        document.getElementsByTagName("input")[0].setAttribute("placeholder", this.DisplayString);
     }
 
     /*
