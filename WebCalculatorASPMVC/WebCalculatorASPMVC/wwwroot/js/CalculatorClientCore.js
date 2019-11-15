@@ -12,12 +12,21 @@
         if (!isNaN(value)) {
             //Its a number
             //console.log("It's a Number: " + value);
-            //Save the Key to the KeysPressed Object.
-            this.KeysPressed.push(value);
-            //Retrieve the Numbers after Assembling the String of Keys
-            this.DisplayString = this.assembleStringofKeys();
-            //console.log("KeysPressed: " + this.KeysPressed);
-            this.display();            
+
+            console.log(this.KeysRecorder);
+            if (this.KeysRecorder === undefined || Object.keys(this.KeysRecorder).length === 0) {
+                console.log("Key Recorder is Empty");
+                //Save the Key to the KeysPressed Object.
+                this.KeysPressed.push(value);
+                this.DisplayString = this.assembleStringofKeys();
+                this.display();
+            } else {
+                console.log("Key Recorder is Not Empty");
+                this.KeysPressed.push(value);
+                this.DisplayString = this.assembleStringofKeys();
+                this.display();
+            }
+            
         }
 
         if (value === ".") {
@@ -37,6 +46,11 @@
             this.KeysRecorder.push(numbers);            
             //Save Current Operator
             this.KeysRecorder.push(value);
+            //
+            this.KeysPressed.push(value);
+            console.log(this.KeysPressed);
+            this.DisplayString = this.assembleStringofKeys();
+            this.display();
             //Clear the Previous KeysPressed
             this.KeysPressed = [];            
             //console.log("KeysRecorder: " + this.KeysRecorder);
