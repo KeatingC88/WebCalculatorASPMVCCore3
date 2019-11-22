@@ -31,14 +31,12 @@
      */
 
     //OnClick Event Values passed from the View.
-    key(value) {
+    key(value) {        
         //Handles the numerical rules
-        if (!isNaN(value)) {
-            
-            this.KeysPressed.push(value);//Set number into the object.
+        if (!isNaN(value)) {            
+            this.KeysPressed.push(value);//Set number into the object.            
             this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concantentate what's currently in the keysRecorder with the current key that is pressed.
             this.display();//output.
-
         }
         //Handles the decimal rules
         if (value === ".") {
@@ -75,7 +73,7 @@
 
             }
 
-            this.KeysPressed.push(value);//else apply the Operator to the keysPressed object.
+            this.KeysPressed.push(" " + value);//else apply the Operator to the keysPressed object.
             this.KeysRecorder.push(this.KeysPressed.join(""));//set the operator into the keysRecorder so the user can begin typing the next set of numbers or decimal.
             this.DisplayString = this.keyRecorderAssembler();//string the keyRecorder object for the Display String.
             this.display();//output to the user.
@@ -99,7 +97,13 @@
         
         var text = "";
         for (var i = 0, len = this.KeysRecorder.length; i < len; i++) {
-            text += this.KeysRecorder[i];
+            text += this.KeysRecorder[i] + "\n";
+
+            if ((i + 2) < 4) {
+                document.getElementsByTagName("textarea")[0].setAttribute("rows", 2 + i);//Resize every time an Operator is selected.
+            } else {
+                document.getElementsByTagName("textarea")[0].setAttribute("rows", 4);//Stop Resizing at this many rows.
+            }            
         }
         return text;
 
@@ -142,11 +146,13 @@
     clearDisplay() {
         this.KeysPressed = [];
         this.KeysRecorder = [];
-        document.getElementsByTagName("input")[0].setAttribute("placeholder", "");
+        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", "");
+        document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize back to default.
     }
     //Outputs the finalized string to the user simulating a real-time response.
     display() {
-        document.getElementsByTagName("input")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
+        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
+        document.getElementsByTagName("textarea")[0].scrollTop = document.getElementsByTagName("textarea")[0].scrollHeight;//Forces the scroll in the display to the bottom of the last User Input.
     }
 
 }

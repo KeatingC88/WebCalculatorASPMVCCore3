@@ -4,9 +4,10 @@
 <style>
     /*Default CSS for Larger Viewports (Why doesn't this work in Calculator-keypad.css File????)*/    
     @@media (min-width: 768px) {
-        #calculator-card-body {max-height: 236px !important;}
-        #calculator-enter-btn {height: 95px !important;}
+        #calculator-card-body {max-height: 234.5px !important;}
+        #calculator-enter-btn {height: 93.5px !important;}
         #calculator-zero-btn {width: 94px !important;bottom: 48px !important;}
+        #calculator-decimal-btn {height: initial;}
     }
 </style>
 
@@ -14,11 +15,11 @@
     <form>
 
         <div class="card-header p-0">
-            
+
             <div class="form-group">
-                <input class="form-control" type="text" placeholder="" readonly>
+                <textarea class="form-control" id="textarea-display" rows="1" style="resize: none;"></textarea>
             </div>
-            
+
 
         </div>        
         
