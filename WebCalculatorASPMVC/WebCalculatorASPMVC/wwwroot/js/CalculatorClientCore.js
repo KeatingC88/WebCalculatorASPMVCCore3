@@ -3,6 +3,9 @@
     DisplayString = "";
     KeysPressed = [];
     KeysRecorder = [];
+    KeySessionRecorder = [];
+
+    
 
     /**
      * This section is just for Displaying Expression Inputs from the User (Buttons).
@@ -29,6 +32,14 @@
      * 
      * @param {any} value
      */
+
+    constructor() {
+        //Keyboard EventListener
+        const that = this;        
+        window.addEventListener('keydown', function (e) {
+            that.keyBoardEventListener(e);
+        });      
+    }
 
     //OnClick Event Values passed from the View.
     key(value) {        
@@ -91,6 +102,7 @@
 
         }
 
+        
     }
     //Loops the KeysRecorder and assembles a single string for the DisplayString before outputting to the user with the display() method.
     keyRecorderAssembler() {
@@ -142,6 +154,127 @@
                 break;
         }
     }
+    //Keyboard Events
+    keyBoardEventListener(e) {        
+        //console.log("Key Code:" + e.keyCode);
+        switch (e.keyCode) {
+            case 96:
+                this.key(0);
+                break;
+            case 97:
+                this.key(1);
+                break;
+            case 98:
+                this.key(2);
+                break;
+            case 99:
+                this.key(3);
+                break;
+            case 100:
+                this.key(4);
+                break;
+            case 101:
+                this.key(5);
+                break;
+            case 102:
+                this.key(6);
+                break;
+            case 103:
+                this.key(7);
+                break;
+            case 104:
+                this.key(8);
+                break;
+            case 105:
+                this.key(9);
+                break;
+            case 106:
+                this.key('*');
+                break;
+            case 107:
+                this.key('+');
+                break;
+            case 109:
+                this.key('-');
+                break;
+            case 110:
+                this.key('.');
+                break;
+            case 111:
+                this.key('/');
+                break;
+            case 13:
+                this.key('=');
+                break;
+            case 187:
+                if (e.shiftKey === false) {
+                    this.key('=');
+                } else {
+                    this.key('+');
+                }                
+                break;
+            case 189:
+                this.key('-');
+                break;
+            case 48:
+                if (e.shiftKey === false) {
+                    this.key(0);
+                } else {
+                    this.key(')');
+                }
+                break;
+            case 57:
+                if (e.shiftKey === false) {
+                    this.key(9);
+                } else {
+                    this.key('(');
+                }
+                break;
+            case 56:
+                if (e.shiftKey === false) {
+                    this.key(8);
+                } else {
+                    this.key('*');
+                }
+                break;
+            case 55:                
+                this.key(7);                
+                break;
+            case 54:
+                if (e.shiftKey === false) {
+                    this.key(6);
+                } else {
+                    this.key('^');
+                }
+                break;
+            case 53:
+                if (e.shiftKey === false) {
+                    this.key(5);
+                } else {
+                    this.key('%');
+                }
+                break;
+            case 52:
+                this.key(4);
+                break;
+            case 51:
+                this.key(3);
+                break;
+            case 50:
+                this.key(2);
+                break;
+            case 49:
+                this.key(1);
+                break;
+            case 46://Delete
+                this.clearDisplay();
+                break;
+            case 8://BackSpace
+                this.clearDisplay();
+                break;
+        }
+
+    }
     //Empties the object properties in this class to reset the application real-time.
     clearDisplay() {
         this.KeysPressed = [];
@@ -154,8 +287,10 @@
         document.getElementsByTagName("textarea")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
         document.getElementsByTagName("textarea")[0].scrollTop = document.getElementsByTagName("textarea")[0].scrollHeight;//Forces the scroll in the display to the bottom of the last User Input.
     }
-
 }
+
+
+
 //Initiate by Instantiation of current the class.
 var calculator = new CalculatorEvents();
 
