@@ -5,7 +5,7 @@
     KeysRecorder = [];
     KeySessionRecorder = [];
 
-    
+    //https://stackoverflow.com/questions/10894638/how-to-set-cursor-to-input-box-in-javascript
 
     /**
      * This section is just for Displaying Expression Inputs from the User (Buttons).
@@ -35,9 +35,10 @@
 
     constructor() {
         //Keyboard EventListener
-        const that = this;        
+        const that = this;
+        //Event Listener to find the keyboard that was pressed.
         window.addEventListener('keydown', function (e) {
-            that.keyBoardEventListener(e);
+            that.keyBoardEventConnector(e);
         });      
     }
 
@@ -73,22 +74,33 @@
             
         }
         //Handles the operator rules
-        if (this.arithmeticOperatorDetector(value) !== false) {
-            
-            var lastKeyPress = this.getLastKeysPressed();//fetch the last character key that was pressed in the keysPressed[].
-            if (lastKeyPress === undefined || Object.keys(this.KeysPressed).length === 0 || lastKeyPress === "0.") {//if no number was pressed, the object is empty, or the last key is a decimal without a number while the user pressed an operator.
-
-                this.KeysPressed.push("0");//then assign a 0 to be placed after the decimal example: 213.0
-                this.DisplayString = this.keyRecorderAssembler();//string the keyRecorder object for the Display String.
-                this.display();//output to the user.
-
+        if (this.arithmeticOperatorMatch(value) !== false) {
+            //Keeping Track of the KeyPresses and KeysRecorded based on their latest inputs.
+            var lastKeyPressed = this.getLastKeysPressed();//fetch the last character key that was pressed in the keysPressed[].
+            var lastKeyRecorded = this.getLastRecordedKey();//fetch the last character key that was pressed in the keysRecorder[].            
+            //This allows the user to begin with a negative number
+            if (Object.keys(this.KeysPressed).length === 0) {
+                if (value === "-" && lastKeyRecorded != "-") {
+                    this.KeysPressed.push(value);
+                    this.KeysRecorder.push(this.KeysPressed.join(""));
+                    this.DisplayString = this.KeysPressed;
+                    this.display();
+                    this.KeysPressed = [];
+                }
             }
 
-            this.KeysPressed.push(" " + value);//else apply the Operator to the keysPressed object.
-            this.KeysRecorder.push(this.KeysPressed.join(""));//set the operator into the keysRecorder so the user can begin typing the next set of numbers or decimal.
-            this.DisplayString = this.keyRecorderAssembler();//string the keyRecorder object for the Display String.
-            this.display();//output to the user.
-            this.KeysPressed = [];//reset/clear the object for the next series of numbers or decimal.
+            if (Object.keys(this.KeysPressed).length > 0) {
+                console.log("KeysPressed has 1 Element");
+                this.KeysPressed.push(value);
+                this.KeysRecorder.push(this.KeysPressed.join(""));
+                this.DisplayString = this.keyRecorderAssembler();
+                this.display();
+                this.KeysPressed = [];
+            } else {
+                this.DisplayString = this.keyRecorderAssembler();
+                this.display();
+                this.KeysPressed = [];
+            }
 
         }
         //Handles the calculation rules
@@ -109,13 +121,15 @@
         
         var text = "";
         for (var i = 0, len = this.KeysRecorder.length; i < len; i++) {
-            text += this.KeysRecorder[i] + "\n";
 
-            if ((i + 2) < 4) {
-                document.getElementsByTagName("textarea")[0].setAttribute("rows", 2 + i);//Resize every time an Operator is selected.
-            } else {
-                document.getElementsByTagName("textarea")[0].setAttribute("rows", 4);//Stop Resizing at this many rows.
-            }            
+            text += this.KeysRecorder[i];
+            /*
+                if ((i + 2) < 4) {
+                    document.getElementsByTagName("textarea")[0].setAttribute("rows", 2 + i);//Resize every time an Operator is selected.
+                } else {
+                    document.getElementsByTagName("textarea")[0].setAttribute("rows", 4);//Stop Resizing at this many rows.
+                } 
+            */
         }
         return text;
 
@@ -134,8 +148,20 @@
         return lastItem;
 
     }
+    //Empties the object properties in this class to reset the application real-time.
+    clearDisplay() {
+        this.KeysPressed = [];
+        this.KeysRecorder = [];
+        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", "");
+        document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize back to default.
+    }
+    //Outputs the finalized string to the user simulating a real-time response.
+    display() {
+        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
+        document.getElementsByTagName("textarea")[0].scrollTop = document.getElementsByTagName("textarea")[0].scrollHeight;//Forces the scroll in the display to the bottom of the last User Input.
+    }
     //Finds a matching Operator and returns the operator as a string; by default, will return false if no match is found.
-    arithmeticOperatorDetector(value) {
+    arithmeticOperatorMatch(value) {
         switch (value) {
             case "+":
                 return '+';
@@ -154,8 +180,8 @@
                 break;
         }
     }
-    //Keyboard Events
-    keyBoardEventListener(e) {        
+    //Keyboard Events Matcher
+    keyBoardEventConnector(e) {
         //console.log("Key Code:" + e.keyCode);
         switch (e.keyCode) {
             case 96:
@@ -203,6 +229,9 @@
             case 111:
                 this.key('/');
                 break;
+            case 191:
+                this.key('/');
+                break;
             case 13:
                 this.key('=');
                 break;
@@ -211,7 +240,7 @@
                     this.key('=');
                 } else {
                     this.key('+');
-                }                
+                }
                 break;
             case 189:
                 this.key('-');
@@ -237,8 +266,8 @@
                     this.key('*');
                 }
                 break;
-            case 55:                
-                this.key(7);                
+            case 55:
+                this.key(7);
                 break;
             case 54:
                 if (e.shiftKey === false) {
@@ -266,26 +295,19 @@
             case 49:
                 this.key(1);
                 break;
+            case 190:
+                this.key('.');
+                break;
             case 46://Delete
                 this.clearDisplay();
                 break;
             case 8://BackSpace
+                //
                 this.clearDisplay();
                 break;
+            //
         }
 
-    }
-    //Empties the object properties in this class to reset the application real-time.
-    clearDisplay() {
-        this.KeysPressed = [];
-        this.KeysRecorder = [];
-        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", "");
-        document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize back to default.
-    }
-    //Outputs the finalized string to the user simulating a real-time response.
-    display() {
-        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
-        document.getElementsByTagName("textarea")[0].scrollTop = document.getElementsByTagName("textarea")[0].scrollHeight;//Forces the scroll in the display to the bottom of the last User Input.
     }
 }
 
