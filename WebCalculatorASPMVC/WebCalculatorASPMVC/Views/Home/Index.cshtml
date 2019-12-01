@@ -13,17 +13,21 @@
 
 <div class="row ml-2 justify-content-md-center">
     <form>
+        
 
-        <div class="card-header p-0">
+            <div class="card-header p-0">
 
-            <div class="form-group">
-                <textarea class="form-control" id="textarea-display" rows="1" style="resize: none;"></textarea>
+                <div class="form-group">
+                    <textarea class="form-control" id="textarea-display" rows="1" style="resize: none;" readonly></textarea>
+                </div>
+
+
             </div>
 
-
-        </div>        
+           
         
-        <div class="card" id="calculator-keypad-parent-card">
+        
+        <div class="card" id="calculator-keypad-parent-card">            
             <div class="card-body p-0" id="calculator-card-body">
                 <!--Child Rows and Columns of the Calculator Keypad-->
                 <div class="row">
@@ -67,5 +71,30 @@
 
             </div><!--Parent Card-Body-->
         </div><!--Parent Card-->
+
+
+
     </form>
 </div><!--Parent Row-->
+
+
+<div class="row justify-content-md-center">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row justify-content-md-center">
+                    <div class="col">
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-secondary active">
+                                <input type="radio" name="calculator-type" id="scientific-calculator-radio" autocomplete="off" checked> Scientific
+                            </label>
+                            <label class="btn btn-secondary">
+                                <input type="radio" name="calculator-type" id="standard-calculator-radio" autocomplete="off"> Standard
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
