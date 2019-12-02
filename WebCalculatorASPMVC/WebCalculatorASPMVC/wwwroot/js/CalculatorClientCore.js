@@ -41,38 +41,32 @@
      * This section handles all OnClick Events from the View.
      * (Needs an update Summary Description)
      */
-    key(value) {
-        //Check the Selected Radio Button to determine code flow and operations from the User's request.
-        if (document.getElementById('standard-calculator-radio').checked) {
-            this.CalculateOnSequence = true;            
-        } else if (document.getElementById('scientific-calculator-radio').checked) {
-            this.CalculateOnSequence = false;
-        }
+    key(value) {        
+        this.calculatorRadioType();//Selects the Type of Calculator (Scientific/Standard)
     /**
         * This section handles the numerical rules.
-        *
-        * (Needs an update Summary Description)
+        * The KeysPressed[] is mainly used for Numerical Inputs to form a Number before and after a Math Operator/Decimal.       
     */
         if (!isNaN(value)) {            
-            this.KeysPressed.push(value);//Set number into the object.            
-            this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concantentate what's currently in the keysRecorder with the current key that is pressed.
+            this.KeysPressed.push(value);//Set number into KeysPressed[].
+            this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concantentate what's currently in the KeysRecorder[] (such as before/after a decimal or previous strings containing numbers with operators).
             this.display();//output.
-        }        
+        }
     /**
         * This section handles the decimal rules.
-        * 
-        * (Needs an update Summary Description)
+        * First Code Block: If a decimal is the first input without a number, then override the decimal input value with a "0.". This is mainly for display purposes and has no impact in calculations.
+        * Seconde Code Block: The user will not be able to add duplicate decimals to the same number with the help of the KeysPressed[] which allows the user to apply only 1 decimal per number combination before/after each Math Operator as KeysPressed[] is reset.
     */
         if (value === ".") {
-            var previousKeys = this.getLastKeysPressed();//A returned string from the last key that was pressed by the user.
-            if (previousKeys === undefined || Object.keys(this.KeysPressed).length === 0) {//if no numerical key was pressed before.
-                this.KeysPressed.push("0.");//Assign by pushing a Zero w/ a decimal to the KeysPressed.
-                this.DisplayString = this.KeysRecorder.join("") + this.KeysPressed;//concatenate the previous numerical user input(s) with the numbers following after the decimal. example: 0.(XYZ)
+            var previousKeys = this.getLastKeysPressed();//returns single character string from the KeysPressed[].
+            if (previousKeys === undefined || Object.keys(this.KeysPressed).length === 0) {//Checks if the user first clicked the decimal by an emptied KeysPressed[].
+                this.KeysPressed.push("0.");//Override the Value by adding Zero with a decimal into the KeysPressed[].
+                this.DisplayString = this.KeysRecorder.join("") + this.KeysPressed;//concatenate what's currently in the KeysRecorder[] w/ the user's KeysPressed[]. i.e. 123 + 0.(XYZ) or with an empty KeysRecorder[].
                 this.display();//Output to the user.
             }
             
-            var string = this.KeysPressed.join("");//combine everything currently in the keysPressed into a string.
-            var find = string.includes(".");//search the current keysPressed object for a decimal.
+            var string = this.KeysPressed.join("");//String the current digits in the KeysPressed[].
+            var find = string.includes(".");//Search the current keysPressed[] for a decimal.
             if (find === false) {//if no decimal was found
                 this.KeysPressed.push(".");//then apply the decimal after the previous numerical user input(s).
                 this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concatenate the previous numerical user inputs(s) with a decimal example: 123.(XYZ)
@@ -126,17 +120,20 @@
         }        
     /**
         * This section handles the "=" Keypad Button and the Enter Button on the Keyboard.
-        * 
-        * (Needs to Prevent the user from doing "123+" and Calculating as there's no 2nd set of Digits to Operate with.)
+        * If the last Character in the Final Calculations String is a Math Operator, then do not Calculate. Just Ignore until digits/decimal is present.        
     */
         if (value === "=") {
             this.KeysRecorder.push(this.KeysPressed.join(""));//Get any remaining KeysPressed[] values (usually just digits).
             //console.log("Calculate(raw):" + this.KeysRecorder);
-            //console.log("Calculate(string):" + this.KeysRecorder.join(""));
-            this.DisplayString = this.calculate();//Display the Result String
-            this.display();//Output to the user.
-            this.KeysRecorder = [];//Clear after Calculation.
-            this.KeysPressed = [];//Clear after Calculation.
+            //console.log("Calculate(string):" + this.KeysRecorder.join(""));            
+            var keysRecorderString = this.KeysRecorder.join("");
+            var endStringChecker = keysRecorderString.substring(keysRecorderString.length - 1);
+            if (this.arithmeticOperatorMatch(endStringChecker) === false) {
+                this.DisplayString = this.calculate();//Display the Result String
+                this.display();//Output to the user.
+                this.KeysRecorder = [];//Clear after Calculation.
+                this.KeysPressed = [];//Clear after Calculation.
+            }
         }
     }//End of OnClick Events from the View.
 
@@ -173,6 +170,7 @@
     //Unused method that might come in handy later.
     getLastRecordedKey() {
         var lastItem = this.KeysRecorder[this.KeysRecorder.length - 1];
+        console.log(lastItem);
         return lastItem;
     }
     //Restore the View to Default and this Class Properties.
@@ -205,6 +203,14 @@
             default:
                 return false;
                 break;
+        }
+    }
+    //Check the Selected Radio Button to determine code flow and operations from the User's request.
+    calculatorRadioType() {        
+        if (document.getElementById('standard-calculator-radio').checked) {
+            this.CalculateOnSequence = true;
+        } else if (document.getElementById('scientific-calculator-radio').checked) {
+            this.CalculateOnSequence = false;
         }
     }
     //Keyboard Event Listener: for when a User Presses a Key on the Keyboard.
