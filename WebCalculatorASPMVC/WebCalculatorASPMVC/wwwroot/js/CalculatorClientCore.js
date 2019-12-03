@@ -2,98 +2,85 @@
 {
     //https://stackoverflow.com/questions/10894638/how-to-set-cursor-to-input-box-in-javascript
 
-    /** (updated: 11-30-2019)
-     * This section is just for Displaying Expression (Scientific Calculations using PEMDAS/BEDMAS) Or Sequential (Standard Calculations) Inputs from the User (Buttons).
+    /** (Updated: 12-2-2019)
+     * This section is the OnClick Events and Math Logic: 
+     * Displaying Scientific-Expressional(PEMDAS/BEDMAS) & Standard(Sequential-User-Input) Calculations.
      * 
      * How it works: 
-     * 1) A value is added to keysPressed when an OnClick Event is used in the View as a button. 
-     * 2) The value is inspected by 3 IF statements and sent to the keysRecorder as a Log/Storage for all the keysPressed in this session acting as real-time events. 
-     * 3) keysPressed() is reset after every Operator the user hits (Addition, Subtraction, Multiplication, Division) while the keysRecorder keeps that information in segemental elements in the object.
-     * 4) In the end, this class results into an arithmetic expression string for calculation rules; rules that is to be handled out of this class and managed by another class; the Calculator Services Class for PEMDAS and etc.
-     * 
-     * IF Statements (Application Handlers and User Regulations):
-     * 1) Is value a number.
-     * 2) Is value an Operator found in the arithmeticOperatorDetector() Method, and if it isn't then it will return false.
-     * 3) Is value a Decimal and only allow 1 decimal per This.KeyPressed and apply a zero before the decimal if the decimal is pressed first.
-     * 4) Is value an Equal Sign that performs the Calculation of the string that is finalized by all other methods in this Class Object.
-     * 
-     * keyRecorderAssembler() Method: returns a String that is concantenated from everything in the KeyRecorder[].
-     * 
-     * arithmeticOperatorMatch(value) Method: returns a matching string of the Operator the user has clicked, and returns false by default (no match found).
-     * 
-     * clearDisplay() Method: clears both keysRecorder and keysPressed which resets the entire application in real-time.
-     * 
-     * display() Method: sets the DisplayString into the HTML input type=text as a readonly output for the user.
-     * 
-     * @param {any} value
+     * 1) User clicks a button on the View.
+     * 2) The value of that button is passed into this Class through Javascript's OnClick Event. (Either by mouse/keyboard).
+     * 3) If it's numerical value or decimal, it will be pushed into the KeysPressed[].
+     * 4) If it's a math operator, it combine the digits/decimal into a single string from KeysPressed[] and empty it the object.
+     * 5) Once the digits/decimal is compiled with the math operator, it will then store that data into KeysRecorder[].
+     * 6) The KeysRecorder[] will be responsible for Displaying the user inputs to the user back on the View.
+     * 7) The KeysRecorder[] will also be responsible for Calculations of the String it's passing to the calculation() method.
+     * 8) The Display String is often overrided in various sections of this application for presentation.
+     * 9) The display() method is responsible for setting our data into the View.
      */
 
+    /**
+     *
+     * The Class Properties Section.
+     *
+    */
     DisplayString = "";// Used to Set Expressions and Connect to the Output Display() for the User to View in the Text-Area.
     KeysPressed = [];// Key Inputs such as Numbers, Decimal, or a Math Operator.
     KeysRecorder = []; // Completed KeyPressed[] Segements that are for Calculation Strings for This.Calcuate(), Output Strings for Display(), and Standard Type Calculator Operations.
     KeySessionRecorder = [];// Entire Segemented Expressions or History Storage of the User's Expression Strings.
     CalculateOnSequence = false;//False = Scientific Calculator (PEMDAS/BEDMAS Calculations), True = Standard Calculator (Input Sequence Calculations from First Inputs to Last Excempts PEMDAS/BEDMAS Algerbraic Order of Operations Sequences)
-
+    //Script Start-Up
     constructor() {
-        this.keyBoardEventListener();//This connects w/ the Keyboard Event List and Commands.
+        this.keyBoardEventListener();//This must load on start-up.
     }
     /**
-     * This section handles all OnClick Events from the View.
-     * (Needs an update Summary Description)
+     * 
+     * This section handles all OnClick Events from the View (aka the Index).
+     * 
      */
     key(value) {        
         this.calculatorRadioType();//Switches the Type of Calculator (Scientific/Standard) based View's Form-Radio Buttons.
-
-    /**
-        * This section handles the numerical rules.
-        * The KeysPressed[] is mainly used for Numerical Inputs to form a Number before and after a Math Operator/Decimal.       
+        this.number(value);
+        this.decimal(value);
+        this.basicMathOperator(value);
+        this.equalsOperator(value);    
+    }
+    /** 
+     *  
+     * The Class Methods Section.
+     *  
     */
-        if (!isNaN(value)) {
-            this.KeysPressed.push(value);//Set number into KeysPressed[].
-            this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concantentate what's currently in the KeysRecorder[] (such as before/after a decimal or previous strings containing numbers with operators).
-            this.display();//output.
+    //This section handles finding a Math Operator Math. (By Default returns false).
+    arithmeticOperatorMatch(value) {
+        switch (value) {
+            case "+":
+                return '+';
+                break;
+            case "-":
+                return '-';
+                break;
+            case '*':
+                return '*';
+                break;
+            case '/':
+                return '/';
+                break;
+            default:
+                return false;
+                break;
         }
-    /**
-        * This section handles the decimal rules.
-        * First Code Block: If a decimal is the first input without a number, then override the decimal input value with a "0.". This is mainly for display purposes and has no impact in calculations.
-        * Seconde Code Block: The user will not be able to add duplicate decimals to the same number with the help of the KeysPressed[] which allows the user to apply only 1 decimal per number combination before/after each Math Operator as KeysPressed[] is reset.
-    */
-        if (value === ".") {
-            var previousKeys = this.getLastKeysPressed();//returns single character string from the KeysPressed[].
-            if (previousKeys === undefined || Object.keys(this.KeysPressed).length === 0) {//Checks if the user first clicked the decimal by an emptied KeysPressed[].
-                this.KeysPressed.push("0.");//Override the Value by adding Zero with a decimal into the KeysPressed[].
-                this.DisplayString = this.KeysRecorder.join("") + this.KeysPressed;//concatenate what's currently in the KeysRecorder[] w/ the user's KeysPressed[]. i.e. 123 + 0.(XYZ) or with an empty KeysRecorder[].
-                this.display();//Output to the user.
-            }
-            
-            var string = this.KeysPressed.join("");//String the current digits in the KeysPressed[].
-            var find = string.includes(".");//Search the current keysPressed[] for a decimal.
-            if (find === false) {//if no decimal was found
-                this.KeysPressed.push(".");//then apply the decimal after the previous numerical user input(s).
-                this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concatenate the previous numerical user inputs(s) with a decimal example: 123.(XYZ)
-                this.display();//Output to the user.
-            }
-        }
-    /**
-        * This section handles the operator rules (+/-*).
-        * Everytime a User selects a Math Operator, set it into the KeysRecorder[] and Reset the KeysPressed[].
-        * Only the "-" has a special exception for Negative Numbers.
-        * There are 2 parts: When the user decides whether to use a Standard Calculator or Scientific Calculator.
-        * Standard Calculators will Calculate in a Sequence each time a new number is input, and when the Math Operator is clicked, it Calculates immediately without considering "PEMDAS/BEDMAS in Algerbraic Expressions".
-        * Scientific Calculators will use this.CalculateOnSequence === false while Standard Calculators will use this.CalculateOnSequence === true in this program.
-    */
+    }
+    //This section handles the operator rules(+/-*).
+    basicMathOperator(value) {
+       /** 
+       * Everytime a User selects a Math Operator, set it into the KeysRecorder[] and Reset the KeysPressed[].
+       * Only the "-" has a special exception for Negative Numbers.
+       * There are 2 parts: When the user decides whether to use a Standard Calculator or Scientific Calculator.
+       * Standard Calculators will Calculate in a Sequence each time a new number is input, and when the Math Operator is clicked, it Calculates immediately without considering "PEMDAS/BEDMAS in Algerbraic Expressions".
+       * Scientific Calculators will use this.CalculateOnSequence === false while Standard Calculators will use this.CalculateOnSequence === true in this program.
+       */
         if (this.arithmeticOperatorMatch(value) !== false) {// The User has Selected a Math Operator because a Match was Found (not false).
             if (this.CalculateOnSequence === false) {
                 //Calculator's Scientific-Expression Protocol
-
-                /* Old CodeFlow for Negative Numbers.
-                if (Object.keys(this.KeysRecorder).length === 0 && value === "-" && Object.keys(this.KeysPressed).length === 0) {//If nothing is in the KeyRecorder[].
-                    this.KeysRecorder.push(value);
-                    this.DisplayString = this.keyRecorderAssembler();
-                    this.display();//Output to the user.                 
-                }
-                */
-
                 if (Object.keys(this.KeysPressed).length >= 1 && Object.keys(this.KeysRecorder).length !== undefined) {// If there are digits and the user hits a Math Operator
                     this.KeysPressed.push(value);//Set the Math Operator with the previous digits in the KeysPressed[].                    
                     this.KeysRecorder.push(this.KeysPressed.join(""));//Set the previous Digits that are currently in the KeysPressed w/ the New Math Operator Value into the KeysRecorder[]
@@ -122,11 +109,62 @@
                     this.display();//Output to the user.
                 }
             }
-        }        
-    /**
-        * This section handles the "=" Keypad Button and the Enter Button on the Keyboard.
+        }
+    }
+    //This section handles the Calculation Function from the KeysRecorder[].
+    calculate() {
+        var x = this.keyRecorderAssembler();//Get KeysRecorder[] as a String.
+        var res = eval(x);//Calculate KeysRecorder[] as a String.
+        return res;//Return the Solution/Result as a String.
+    }
+    //This section handles the View's Radio options that corresponds with application's codeflow for Sequence or Scientific.
+    calculatorRadioType() {
+        if (document.getElementById('standard-calculator-radio').checked) {
+            this.CalculateOnSequence = true;
+        } else if (document.getElementById('scientific-calculator-radio').checked) {
+            this.CalculateOnSequence = false;
+        }
+    }
+    //This section handles the revert to default properties and settings of the application.
+    clearDisplay() {
+        this.KeysPressed = [];//Empty the Object.
+        this.KeysRecorder = [];//Empty the Object.
+        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", "");//Empty the <textArea> to default.
+        document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize the <textArea> back to default.
+    }
+    //This section handles the decimal rules.
+    decimal(value) {
+        /**
+        * First Code Block: If a decimal is the first input without a number, then override the decimal input value with a "0.". This is mainly for display purposes and has no impact in calculations.
+        * Seconde Code Block: The user will not be able to add duplicate decimals to the same number with the help of the KeysPressed[] which allows the user to apply only 1 decimal per number combination before/after each Math Operator as KeysPressed[] is reset.
+        */
+        if (value === ".") {
+            var previousKeys = this.getLastKeysPressed();//returns single character string from the KeysPressed[].
+            if (previousKeys === undefined || Object.keys(this.KeysPressed).length === 0) {//Checks if the user first clicked the decimal by an emptied KeysPressed[].
+                this.KeysPressed.push("0.");//Override the Value by adding Zero with a decimal into the KeysPressed[].
+                this.DisplayString = this.KeysRecorder.join("") + this.KeysPressed;//concatenate what's currently in the KeysRecorder[] w/ the user's KeysPressed[]. i.e. 123 + 0.(XYZ) or with an empty KeysRecorder[].
+                this.display();//Output to the user.
+            }
+
+            var string = this.KeysPressed.join("");//String the current digits in the KeysPressed[].
+            var find = string.includes(".");//Search the current keysPressed[] for a decimal.
+            if (find === false) {//if no decimal was found
+                this.KeysPressed.push(".");//then apply the decimal after the previous numerical user input(s).
+                this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concatenate the previous numerical user inputs(s) with a decimal example: 123.(XYZ)
+                this.display();//Output to the user.
+            }
+        }
+    }    
+    //This section handles the setting of DisplayString & <TextArea>.
+    display() {
+        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
+        document.getElementsByTagName("textarea")[0].scrollTop = document.getElementsByTagName("textarea")[0].scrollHeight;//Forces the scroll to the bottom of the latest User Input in the <TextArea>.
+    }
+    //This section handles the "=" Keypad Button and the Enter Button on the Keyboard.
+    equalsOperator(value) {
+        /**
         * If the last Character in the Final Calculations String is a Math Operator, then do not Calculate. Just Ignore until digits/decimal is present.        
-    */
+        */
         if (value === "=") {
             /*
             console.log("Keys Pressed (raw): " + this.KeysPressed);
@@ -158,18 +196,7 @@
             }
         }
     }
-
-    /** 
-        Class Methods Section.
-    */
-
-    //Returns the Result of a Calculation from what's currently in the KeysRecorder[].
-    calculate() {
-        var x = this.keyRecorderAssembler();//Get KeysRecorder[] as a String.
-        var res = eval(x);//Calculate KeysRecorder[] as a String.
-        return res;//Return the Solution/Result as a String.
-    }
-    //Iterate the KeysRecorder[] and return a single string. Usually used for preparation for the Display String before output using display().
+    //This section iterates the KeysRecorder[] and return a single string.(Generally for DisplayString property).
     keyRecorderAssembler() {        
         var text = "";
         var lastRecordedKeyLastChar = this.KeysRecorder;
@@ -188,66 +215,20 @@
         }
         return text;
     }
-    //Get the Last KeyPressed Value in the object. Returns a String. Used in the Decimal Section Handler.
+    //This section gets the last index in KeysPressed[].
     getLastKeysPressed() {
         var lastItem = this.KeysPressed[this.KeysPressed.length - 1];
         return lastItem;
     }
-    //Unused method that might come in handy later.
-    getLastRecordedKey() {
-        var lastItem = this.KeysRecorder[this.KeysRecorder.length - 1];
-        console.log(lastItem);
-        return lastItem;
-    }
-    //Restore the View to Default and this Class Properties.
-    clearDisplay() {
-        this.KeysPressed = [];//Empty the Object.
-        this.KeysRecorder = [];//Empty the Object.
-        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", "");//Empty the <textArea> to default.
-        document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize the <textArea> back to default.
-    }
-    //User View Output Method: re-using a finalized string to simulate a real-time response from the application.
-    display() {
-        document.getElementsByTagName("textarea")[0].setAttribute("placeholder", this.DisplayString);//inject into bootstrap's placeholder that is a readonly property in the view. Targets the first Input.
-        document.getElementsByTagName("textarea")[0].scrollTop = document.getElementsByTagName("textarea")[0].scrollHeight;//Forces the scroll to the bottom of the latest User Input in the <TextArea>.
-    }
-    //Math Operator Detection: find a matching Math Operator using a Value. Return the operator as a string and by default bool-false if not match was found.
-    arithmeticOperatorMatch(value) {
-        switch (value) {
-            case "+":
-                return '+';
-                break;
-            case "-":
-                return '-';
-                break;
-            case '*':
-                return '*';
-                break;
-            case '/':
-                return '/';
-                break;
-            default:
-                return false;
-                break;
-        }
-    }
-    //Check the Selected Radio Button to determine code flow and operations from the User's request.
-    calculatorRadioType() {        
-        if (document.getElementById('standard-calculator-radio').checked) {
-            this.CalculateOnSequence = true;
-        } else if (document.getElementById('scientific-calculator-radio').checked) {
-            this.CalculateOnSequence = false;
-        }
-    }
-    //Keyboard Event Listener: for when a User Presses a Key on the Keyboard.
+    //This section is the Event Listener for the Web Page.
     keyBoardEventListener() {
         const that = this;
         window.addEventListener('keydown', function (e) {
-            that.keyBoardEventConnector(e);
+            that.keyBoardEventCommand(e);
         });
     }
-    //Keyboard KeyCode List: for matching with the Browser KeyCodes from keyboard presses.
-    keyBoardEventConnector(e) {
+    //This section is the list of keyCodes (commands) between the browser and keyboard.
+    keyBoardEventCommand(e) {
         //console.log("Key Code:" + e.keyCode);
         switch (e.keyCode) {
             case 96:
@@ -368,23 +349,20 @@
                 this.clearDisplay();
                 break;
             case 8://BackSpace
-                //
                 this.clearDisplay();
                 break;
-            //
         }
 
     }
+    //This section handles all the numerical rules.
+    number(value) {
+        /**
+        * The KeysPressed[] is mainly used for Numerical Inputs to form a Number before and after a Math Operator/Decimal.       
+        */
+        if (!isNaN(value)) {
+            this.KeysPressed.push(value);//Set number into KeysPressed[].
+            this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concantentate what's currently in the KeysRecorder[] (such as before/after a decimal or previous strings containing numbers with operators).
+            this.display();//Output to the user.
+        }
+    }
 }
-
-
-
-//Initiate by Instantiation of current the class.
-var calculator = new CalculatorEvents();
-
-class CalculatorServices
-{
-    constructor() { }
-}
-
-//var calculatorServices = new calculatorServices();
