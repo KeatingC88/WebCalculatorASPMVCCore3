@@ -35,19 +35,20 @@
     CalculateOnSequence = false;//False = Scientific Calculator (PEMDAS/BEDMAS Calculations), True = Standard Calculator (Input Sequence Calculations from First Inputs to Last Excempts PEMDAS/BEDMAS Algerbraic Order of Operations Sequences)
 
     constructor() {
-        this.keyBoardEventListener();
+        this.keyBoardEventListener();//This connects w/ the Keyboard Event List and Commands.
     }
     /**
      * This section handles all OnClick Events from the View.
      * (Needs an update Summary Description)
      */
     key(value) {        
-        this.calculatorRadioType();//Selects the Type of Calculator (Scientific/Standard)
+        this.calculatorRadioType();//Switches the Type of Calculator (Scientific/Standard) based View's Form-Radio Buttons.
+
     /**
         * This section handles the numerical rules.
         * The KeysPressed[] is mainly used for Numerical Inputs to form a Number before and after a Math Operator/Decimal.       
     */
-        if (!isNaN(value)) {            
+        if (!isNaN(value)) {
             this.KeysPressed.push(value);//Set number into KeysPressed[].
             this.DisplayString = this.keyRecorderAssembler() + this.KeysPressed.join("");//concantentate what's currently in the KeysRecorder[] (such as before/after a decimal or previous strings containing numbers with operators).
             this.display();//output.
@@ -82,22 +83,26 @@
         * Scientific Calculators will use this.CalculateOnSequence === false while Standard Calculators will use this.CalculateOnSequence === true in this program.
     */
         if (this.arithmeticOperatorMatch(value) !== false) {// The User has Selected a Math Operator because a Match was Found (not false).
-            if (this.CalculateOnSequence === false) {//Calculator's Scientific-Expression Protocol
-                if (Object.keys(this.KeysRecorder).length === 0) {//If nothing is in the KeyRecorder[].
-                    if (value === "-" && Object.keys(this.KeysPressed).length === 0) {//KeyPressed is "-" & there's no Digits prior, then it must be a negative number in the first sequence of digits. (2nd condition will prevent a bug that puts a "-" before and after the set of digits)
-                        this.KeysRecorder.push(value);//Record the value "-" to the KeysRecorder[].
-                        this.DisplayString = this.keyRecorderAssembler();//Set the value to our Display String.
-                        this.display();//Output to the user.
-                    }                    
+            if (this.CalculateOnSequence === false) {
+                //Calculator's Scientific-Expression Protocol
+
+                /* Old CodeFlow for Negative Numbers.
+                if (Object.keys(this.KeysRecorder).length === 0 && value === "-" && Object.keys(this.KeysPressed).length === 0) {//If nothing is in the KeyRecorder[].
+                    this.KeysRecorder.push(value);
+                    this.DisplayString = this.keyRecorderAssembler();
+                    this.display();//Output to the user.                 
                 }
+                */
+
                 if (Object.keys(this.KeysPressed).length >= 1 && Object.keys(this.KeysRecorder).length !== undefined) {// If there are digits and the user hits a Math Operator
-                    this.KeysPressed.push(value);//Set the Math Operator with the previous digits in the KeysPressed[].
+                    this.KeysPressed.push(value);//Set the Math Operator with the previous digits in the KeysPressed[].                    
                     this.KeysRecorder.push(this.KeysPressed.join(""));//Set the previous Digits that are currently in the KeysPressed w/ the New Math Operator Value into the KeysRecorder[]
                     this.DisplayString = this.keyRecorderAssembler();//Run the String Assembler from the KeysRecorder[].
                     this.display();//Output to the user.
                     this.KeysPressed = [];//Reset the KeysPressed[] after each Math Operator Value.
                 }
-            } else if (this.CalculateOnSequence === true) {//Calculator's Standard Protocol
+            } else if (this.CalculateOnSequence === true) {
+                //Calculator's Standard Protocol
                 this.KeysRecorder.push(this.KeysPressed.join(""));//Get the Current KeysPressed[] from the User (Digits) and set them into the Keysrecorder[].
                 this.KeysPressed = [];//Reset the KeysPressed for if when the User wants to select more digits/decimal.
                 this.KeysRecorder.push(value);//Set the Math Operator into the Recorder after the digits.
@@ -123,41 +128,62 @@
         * If the last Character in the Final Calculations String is a Math Operator, then do not Calculate. Just Ignore until digits/decimal is present.        
     */
         if (value === "=") {
-            this.KeysRecorder.push(this.KeysPressed.join(""));//Get any remaining KeysPressed[] values (usually just digits).
-            //console.log("Calculate(raw):" + this.KeysRecorder);
-            //console.log("Calculate(string):" + this.KeysRecorder.join(""));            
-            var keysRecorderString = this.KeysRecorder.join("");
-            var endStringChecker = keysRecorderString.substring(keysRecorderString.length - 1);
-            if (this.arithmeticOperatorMatch(endStringChecker) === false) {
-                this.DisplayString = this.calculate();//Display the Result String
-                this.display();//Output to the user.
-                this.KeysRecorder = [];//Clear after Calculation.
-                this.KeysPressed = [];//Clear after Calculation.
+            /*
+            console.log("Keys Pressed (raw): " + this.KeysPressed);
+            console.log("Keys Pressed (string): " + this.KeysPressed.join(""));
+            console.log("Keys Recorder (raw): " + this.KeysRecorder);
+            console.log("Keys Recorder (string): " + this.KeysRecorder.join(""));
+            */
+            if (Object.keys(this.KeysRecorder).length > 0 && Object.keys(this.KeysRecorder).length !== undefined) {
+
+                this.KeysRecorder.push(this.KeysPressed.join(""));//Get any remaining KeysPressed[] values (usually just digits).         
+                var keysRecorderString = this.keyRecorderAssembler();//Get the current KeysRecorder[] and set to a variable.
+                var endingCharsOfRecorderString = keysRecorderString.substring(keysRecorderString.length - 1);//Get the Last Character in the KeysRecorder[].String and set to a variable.
+
+                if (this.arithmeticOperatorMatch(endingCharsOfRecorderString) !== false) {
+                    //If the last character is ending with a Math Operator.
+                    this.DisplayString = this.keyRecorderAssembler();//Set KeysAssembler (KeysRecorder) by Default
+                    this.display();//Output Default to the User
+                } else {
+                    //Run Calculations and Output Processes.
+                    this.DisplayString = this.calculate();//Display the Result String
+                    this.display();//Output to the user.
+                    this.KeysRecorder = [];//Clear after Calculation.
+                    this.KeysPressed = [];//Clear after Calculation.
+                }
+            } else {
+                //If there is no Math Operator, then display KeysPressed[].
+                this.DisplayString = this.KeysPressed.join("");//Set KeysPressed by Default
+                this.display();//Output Default to the User
             }
         }
-    }//End of OnClick Events from the View.
+    }
 
     /** 
         Class Methods Section.
     */
 
-    //Returns the Result of a Calculation.
+    //Returns the Result of a Calculation from what's currently in the KeysRecorder[].
     calculate() {
-        var string = this.keyRecorderAssembler();//Get KeysRecorder[] as a String.
-        var result = eval(string);//Calculate that String.
-        return result;//Return the Solution as a String.
+        var x = this.keyRecorderAssembler();//Get KeysRecorder[] as a String.
+        var res = eval(x);//Calculate KeysRecorder[] as a String.
+        return res;//Return the Solution/Result as a String.
     }
     //Iterate the KeysRecorder[] and return a single string. Usually used for preparation for the Display String before output using display().
     keyRecorderAssembler() {        
         var text = "";
+        var lastRecordedKeyLastChar = this.KeysRecorder;
+        console.log(lastRecordedKeyLastChar);
         for (var i = 0, len = this.KeysRecorder.length; i < len; i++) {
             text += this.KeysRecorder[i];
+            //if(lastrecordedkeylastChar === +, -, *, / && lastrecordedkey is > 1){ do the line break }
+            
             /*
-                if ((i + 2) < 4) {
-                    document.getElementsByTagName("textarea")[0].setAttribute("rows", 2 + i);//Resize every time an Operator is selected.
-                } else {
-                    document.getElementsByTagName("textarea")[0].setAttribute("rows", 4);//Stop Resizing at this many rows.
-                } 
+            if ((i + 2) < 4) {
+                document.getElementsByTagName("textarea")[0].setAttribute("rows", 2 + i);//Resize every time an Operator is selected.
+            } else {
+                document.getElementsByTagName("textarea")[0].setAttribute("rows", 4);//Stop Resizing at this many rows.
+            }
             */
         }
         return text;

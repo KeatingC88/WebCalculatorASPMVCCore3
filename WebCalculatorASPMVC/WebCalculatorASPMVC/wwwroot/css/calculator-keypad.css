@@ -21,26 +21,38 @@
 /*Keypad Enter Button*/
 #calculator-enter-btn {
     width: 100%;
-    height: 69.6px;
+    height: 83px;
+    border-bottom-left-radius: 0px;
+}
+/*Keypad One Button Style and Layout*/
+#calculator-one-btn {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    width: 100%;
+}
+/*Keypad Two Button Style and Layout*/
+#calculator-two-btn {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
 }
 /*Keypad Zero Button Style and Layout*/
 #calculator-zero-btn {
     position: relative;
     border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     width: 81px;
+    height: 42px;
     bottom: 42px;
 }
 /*Keypad Decimal Button Style and Layout*/
 #calculator-decimal-btn {
-    width: 45px;
-    height: 40px;
-}
-/*Keypad One Button Style and Layout (to Align and Blend in with the Modified Zero Button)*/
-#calculator-keypad-one-btn {
-    width: 100%;
+    width: 41px;
+    height: 42px;
     border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;   
 }
 /*Keypad Addition Operation Button Style and Layout*/
 #calculator-addition-btn {
-    height: 95px;
+    height: 82.9px;
 }

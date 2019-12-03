@@ -2,17 +2,18 @@
     ViewData["Title"] = "Web Calculator (MVC)";
 }
 <style>
-    /*Default CSS for Larger Viewports (Why doesn't this work in Calculator-keypad.css File????)*/    
+    /*Default CSS for Larger Viewports over 762px (Why doesn't this work in Calculator-keypad.css File????)*/    
     @@media (min-width: 768px) {
         #calculator-card-body {max-height: 234.5px !important;}
         #calculator-enter-btn {height: 93.5px !important;}
-        #calculator-zero-btn {width: 94px !important;bottom: 48px !important;}
-        #calculator-decimal-btn {height: initial;}
+        #calculator-zero-btn {width: 92px !important;bottom: 47px !important;height: 46.5px !important;}
+        #calculator-decimal-btn {height: 46.6px; width: 44px;}
+        #calculator-addition-btn {height: 94.9px;}
     }
 </style>
 
 <div class="row ml-2 justify-content-md-center">
-    <form>
+    <form style="margin: auto;">
         
 
             <div class="card-header p-0">
@@ -36,7 +37,7 @@
                             <button type="button" class="btn btn-secondary" onclick="calculator.clearDisplay()">C</button>
                             <button type="button" class="btn btn-secondary" onclick="calculator.key(7)">7</button>
                             <button type="button" class="btn btn-secondary" onclick="calculator.key(4)">4</button>
-                            <button type="button" class="btn btn-secondary" onclick="calculator.key(1)" id="calculator-keypad-one-btn">1</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(1)" id="calculator-one-btn">1</button>
                         </div>
                     </div>
                     <div class="col p-0">
@@ -44,7 +45,7 @@
                             <button type="button" class="btn btn-secondary" onclick="calculator.key('/')">/</button>
                             <button type="button" class="btn btn-secondary" onclick="calculator.key(8)">8</button>
                             <button type="button" class="btn btn-secondary" onclick="calculator.key(5)">5</button>
-                            <button type="button" class="btn btn-secondary" onclick="calculator.key(2)">2</button>
+                            <button type="button" class="btn btn-secondary" onclick="calculator.key(2)" id="calculator-two-btn">2</button>
                         </div>
                     </div>
                     <div class="col p-0">
