@@ -6,12 +6,14 @@
     <title>@ViewData["Title"] - WebCalculatorASPMVC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link rel="stylesheet" href="~/css/calculator-keypad.css" />
+    <link rel="stylesheet" href="~/css/calculator.css" />
+    <!--<link rel="stylesheet" href="~/css/main.css" />-->
 </head>
 <body>
 
     <header>
-        <h1 class="display-1 text-center">Web Calculator <br />
+        <h1 class="display-1 text-center">
+            Web Calculator <br />
             <small class="text-muted display-4">ASP.Net Core 3 MVC</small>
         </h1>
     </header>
@@ -30,8 +32,11 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/CalculatorClientcore.js" asp-append-version="true"></script>
+    <script src="~/js/CalculatorDragEvents.js" asp-append-version="true"></script>
+    <!--<script src="~/js/DragTest.js" asp-append-version="true"></script>-->
+    <script src="~/js/StandardCalculatorEvents.js" asp-append-version="true"></script>
+    <script src="~/js/ScientificCalculatorEvents.js" asp-append-version="true"></script>
+    <script src="~/js/KeyboardEvents.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
