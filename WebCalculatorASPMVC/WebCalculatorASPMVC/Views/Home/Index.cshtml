@@ -29,73 +29,11 @@
     }
 </style>
 
-<div class="row ml-2 justify-content-md-center">
-    <div class="col">
-        <form>
-            <div class="card" style="width: 180px; margin: auto;" id="calculator">
-                <div class="card">
-                    <div class="card-header" id="calculator-header">
-
-                    </div>
-                    <div class="card-body p-1" id="calculator-display">
-                        <div class="form-group mb-1 mt-1">
-                            <textarea class="form-control" id="standard-calculator-textarea-display" rows="1" style="resize: none;" readonly></textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="card border-0" id="calculator-keypad">
-                    <div class="card-body p-0" id="calculator-keypad-card-body">
-                        <!--Child Rows and Columns of the Calculator Keypad-->
-                        <div class="row">
-                            <div class="col p-0">
-                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.clearDisplay()">C</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(7)">7</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(4)">4</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(1)" id="calculator-one-btn">1</button>
-                                </div>
-                            </div>
-                            <div class="col p-0">
-                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('/')">/</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(8)">8</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(5)">5</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(2)" id="calculator-two-btn">2</button>
-                                </div>
-                            </div>
-                            <div class="col p-0">
-                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('*')">*</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(9)">9</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(6)">6</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(3)">3</button>
-                                    <button type="button" class="btn btn-secondary btn-lg" onclick="standardCalculator.key('.')" id="calculator-decimal-btn">.</button>
-                                </div>
-                            </div>
-                            <div class="col p-0">
-                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('-')">-</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('+')" id="calculator-addition-btn">+</button>
-                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('=')" id="calculator-enter-btn">E</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <button type="button" class="btn btn-secondary btn-lg" onclick="standardCalculator.key(0)" id="calculator-zero-btn">0</button>
-                        </div>
-                        <!--End Child Rows-->
-
-                    </div><!--Keypad Card-Body-->
-                </div><!--Keypad Card-->
-            </div><!--Calculator Card-->
-        </form>
-    </div><!--Parent Col-->
-</div><!--Parent Row-->
-
-
 <div class="row justify-content-md-center">
-    <div class="col-4">
-        <div class="card">
+    <div class="col">
+
+        <!--Draggable Div with all calculator's inside-->
+        <div class="card" style="margin: auto; width: 300px;">
             <div class="card-body">
                 <div class="row justify-content-md-center">
                     <div class="col">
@@ -119,17 +57,89 @@
                     <div class="col">
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="cal-standard" role="tabpanel" aria-labelledby="cal-standard-tab">
-                                Standard Calculator
-                            </div>
+                                <div class="row ml-2 justify-content-md-center">
+                                    <div class="col">
+                                        <!--Sample Calculator Designing-->
+                                        <form>
+                                            <div class="card" style="width: 180px; margin: auto;" id="calculator">
+                                                <div class="card">
+                                                    <div class="card-header" id="calculator-header">
+
+                                                    </div>
+                                                    <div class="card-body p-1" id="calculator-display">
+                                                        <div class="form-group mb-1 mt-1">
+                                                            <textarea class="form-control" id="standard-calculator-textarea-display" rows="1" style="resize: none;" readonly></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card border-0" id="calculator-keypad">
+                                                    <div class="card-body p-0" id="calculator-keypad-card-body">
+                                                        <!--Child Rows and Columns of the Calculator Keypad-->
+                                                        <div class="row">
+                                                            <div class="col p-0">
+                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.clearDisplay()">C</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(7)">7</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(4)">4</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(1)" id="calculator-one-btn">1</button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col p-0">
+                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('/')">/</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(8)">8</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(5)">5</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(2)" id="calculator-two-btn">2</button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col p-0">
+                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('*')">*</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(9)">9</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(6)">6</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key(3)">3</button>
+                                                                    <button type="button" class="btn btn-secondary btn-lg" onclick="standardCalculator.key('.')" id="calculator-decimal-btn">.</button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col p-0">
+                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('-')">-</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('+')" id="calculator-addition-btn">+</button>
+                                                                    <button type="button" class="btn btn-secondary" onclick="standardCalculator.key('=')" id="calculator-enter-btn">E</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <button type="button" class="btn btn-secondary btn-lg" onclick="standardCalculator.key(0)" id="calculator-zero-btn">0</button>
+                                                        </div>
+                                                        <!--End Child Rows-->
+
+                                                    </div><!--Keypad Card-Body-->
+                                                </div><!--Keypad Card-->
+                                            </div><!--Calculator Card-->
+                                        </form>
+                                        <!--End Sample Calculator Designing-->
+                                    </div>
+                                </div><!--row-->
+                            </div><!--Standard-Tab-->
                             <div class="tab-pane fade" id="cal-scientific" role="tabpanel" aria-labelledby="cal-scientific-tab">
-                                Scientific Calculator
-                            </div>
+                                <div class="row">
+                                    <div class="col">
+
+
+
+                                    </div>
+                                </div><!--row-->
+                            </div><!--Scientific-Tab-->
                         </div><!--tab-content-->
                     </div><!--col-->
                 </div><!--row-->
-            </div>
-        </div>
-    </div>
-</div>
+            </div><!--card-body-->
+        </div><!--card-->
+        <!--Draggable Div with all calculator's inside-->
+
+
+    </div><!--col-->
+</div><!--row-->
 
 <!--https://stackoverflow.com/questions/10894638/how-to-set-cursor-to-input-box-in-javascript-->

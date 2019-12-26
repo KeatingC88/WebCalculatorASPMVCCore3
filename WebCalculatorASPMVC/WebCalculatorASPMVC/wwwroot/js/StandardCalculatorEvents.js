@@ -1,19 +1,18 @@
 ﻿class StandardCalculatorEvents
 {
-    /** (Updated: 12-4-2019)
+    /** (Updated: 12-11-2019)
      * This section is the OnClick Events and Math Logic for: 
      * Standard(Sequential-User-Input) Calculations.
      * 
-     * How it works: 
-     * 1) User clicks a button within the View (OnClick Event).
-     * 2) The value of that button is passed into key(value) method which also serves as the index of this class.
-     * 3) If it's a numerical value or decimal, then the values will be pushed into the KeysPressed[].
-     * 4) If it's a math operator, then combine the digits/decimal from KeysPressed[] into a string and empty the keysPressed[] -- then push the string into KeysRecorder[]. KeysPressed[] -> KeysRecorder[].
-     * 5) The KeysRecorder[] is for saving previous inputs.
-     * 6) The KeysRecorder[] will also be responsible for Displaying the user inputs to the user back on the View.
-     * 7) The KeysRecorder[] will also be responsible for final string that is passed into the calculation() method for a returned result.
-     * 8) The Display String is overrided in each section as needed.
-     * 9) The display() method is responsible for setting our data from the this.DisplayString into the View's DOM.
+     * How this class works: 
+     * 1) The user clicks on a button within the View (OnClick="StandardCalculator.Key(value)").
+     * 2) The value of that button is passed into key(value) method.
+     * 3) If value is a numerical value or decimal, then the values will be pushed into the KeysPressed[].
+     * 4) If value is a math operator, then combine the digits/decimal from KeysPressed[] into a string & empty the keysPressed[].
+     * 5) KeysPressed[] pushs the string into KeysRecorder[] for saving the number/decimal for calculation.
+     * 6) The KeysRecorder[] is for primarily for saving previous numbers, possibly a decimal, and a math operator input.
+     * 7) The KeysRecorder[] will be using a single-finalized string for this.calculation() & returns the result string.
+     * 8) The KeysRecorder[] then uses this.DisplayString & this.display() to send the result or user input data to the <textarea> as an output protocol.
      */
 
     /**
@@ -22,15 +21,12 @@
      *
     */
 
-    DisplayString = "";//Used for Overriding/Overwriting just before the string is to be displayed to the View.
-    KeysPressed = [];//Storage for Key Inputs such as Numbers, Decimal, or a Math Operator.
-    KeysRecorder = []; //Completed KeyPressed[] Segements that are for Calculating Strings for This.Calcuate() or Output String for this.DisplayString.
-    KeySessionRecorder = [];//Completed KeysRecorder[] Segements that will be saved to the database or for viewing history on the client-side.
-
-    //Script Start-Up
+    DisplayString = "";//Overriding for this.display() to use as the output.
+    KeysPressed = [];//Used for pushing Numericals/Decimals into an array/object.
+    KeysRecorder = [];//Used for pushing KeysPressed[] and a Math Operator. Segements are broken after every math operator.
+    KeySessionRecorder = [];//Used for pushing KeysRecorder[] Data to the Database &S Calculation History Log.
+    
     constructor() {
-        console.log("Standard Calculator!");
-        //Default Settings on start-up.
         this.keyBoardEventListener();        
     }
     /**
@@ -38,14 +34,11 @@
      * This section handles all OnClick Events from the View (the Index).
      * 
      */
-    key(value) {
-        
+    key(value){
         this.number(value);
         this.decimal(value);
         this.equalsOperation(value);
-        this.standardMathOperation(value);        
-        //console.log("Standard Math Operator Match: " + this.standardOperatorMatch(value));
-
+        this.standardMathOperation(value);
     }
 
     /** 
@@ -54,7 +47,7 @@
      *  
     */
     
-    //This section handles the Calculation Function from the KeysRecorder[].
+    //This section handles the Calculation Process from the KeysRecorder[].
     calculate() {
         var x = this.KeysRecorder.join("");//Get KeysRecorder[] as a String.
         var res = eval(x);//Calculate KeysRecorder[] as a String.
@@ -65,7 +58,7 @@
         this.KeysPressed = [];//Empty the Object.
         this.KeysRecorder = [];//Empty the Object.
         document.getElementsByTagName("textarea")[0].setAttribute("placeholder", "");//Empty the <textArea> to default.
-        document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize the <textArea> back to default.
+        //document.getElementsByTagName("textarea")[0].setAttribute("rows", 1);//Resize the <textArea> back to default.
     }
     //This section handles the decimal rules.
     decimal(value) {
@@ -260,7 +253,7 @@
             this.display();//Output to the user.
         }
     }
-    //This handles the Standard Calculation Finalized-String Processes
+    //This handles the Standard Calculation with a Finalized-String to Process.
     standardCalculation() {
         //Get the Last Character in the KeysRecorder.
         var lastChar = this.KeysRecorder[this.KeysRecorder.length - 1];
