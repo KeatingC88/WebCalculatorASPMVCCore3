@@ -1,124 +1,55 @@
-﻿class DragCardUI {
-    //Container of Object(s).
-    dragCard = document.querySelector("#dragcard");//Default Card ID.
-    container = document.querySelector("#drag-container");//Parent Elemenet-Event Listening for the Drag/DragStart/DragEnd Events.
-    dragObjects = document.getElementsByClassName('drag');//Assigning DOM Objects with a ClassAttribute(.drag) to become Drag-able.
-    //this.DragCard Properties.
-    active = false;//False is based on if the user has a card selected by mouse/touch.
-    currentX = 0;//<.drag card> left(top) Coordinates
-    currentY = 0;//<.drag card> top(left) Coordinates
-    initialX = 0;//(Mouse Pointer) Coordinates
-    initialY = 0;//(Mouse Pointer) Coordinates
-    xOffset = 0;//<.drag card> left(top) Coordinates
-    yOffset = 0;//<.drag card> top(left) Coordinates
+﻿class DragUI {
+
+    //Container or Object(s). Eventlisteners are binded to this.container. this.container needs to be the (Parent) Element of this.dragcard.
+    container = document.querySelector("#drag-container");//Parent Element for the Children Element(s): Drag/DragStart/DragEnd Class Events.
 
     constructor() {
-        //Load Default CSS foreach <.drag> card found using <Class="drag"> in this.container.
-        for (var i = 0; i < this.dragObjects.length; i++) {
-            document.getElementById(this.dragObjects[i].id).style.transform = "translate3d(1px, 1px, 0)";
-        }
-        //Screen Touch Event Listeners (Original Code).
+        
+        //Resize <this.container> every movement inside it. This helps responsive UI for Mousing-Events.
+        this.container.style.height = (document.documentElement.clientHeight) + "px";//Adjust Height of this.container (drag-container).
+        this.container.style.width = (document.documentElement.clientWidth) + "px";//Adjust Width of this.container.
+
+        //Screen Touch Event Listeners.
         this.container.addEventListener("touchstart", this.dragStart.bind(this), false);
         this.container.addEventListener("touchend", this.dragEnd.bind(this), false);
         this.container.addEventListener("touchmove", this.drag.bind(this), false);
-        //Computer Mouse Event Listeners (Original Code).
+        //Computer Mouse Event Listeners.
         this.container.addEventListener("mousedown", this.dragStart.bind(this), false);
         this.container.addEventListener("mouseup", this.dragEnd.bind(this), false);
         this.container.addEventListener("mousemove", this.drag.bind(this), false);
+        //this.container.addEventListener("mouseleave", this.dragLeave.bind(this), false);
+
         //User Device Listener (BETA)
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             this.userPhoneAgent = navigator.userAgent;
             console.log("phone/tablet/ipad");
-        }//End User Device Listener        
-    }//EndConstructor
-    drag(event) {//This Method fires while mouse is in <drag-container>.
+        }//End User Device Listener
+
+    }//EndConstructor    
+    drag() {//This Method fires while mouse is in <drag-container>.
+
+        //Get Top, Bottom, Left, Right of this.container = <.drag-container>.
+        //Get Top, Bottom, Left, Right of this.dragCard = <.drag-card>.
+        //.dragCard's Width should indicate right side of the card.
+        //.dragCard's Height should indicate bottom side of the card.
+        //this.container's max-width should meet .dragCard's Width for this.active=false;
+        //this.container's max-heigth should meet .dragCard's Heigth for this.active=false;
+
+        //Drag will always be firing while mouse is inside <this.container>
         $('#app-menu').collapse('hide');//Collapse <div class="collapse" id="app-menu"> when a user does mouse-move(mouse-over) the <drag-container>.
 
-        //On MouseMove(mouse-over) / TouchStart (screens) in this.container = <drag-container>
-        
-        
-
-
-
-        //Beta
-        //Set the Boundry for Dumping Cards into NavBar.
-        let windowWidth = window.screen.width;//Get Max Screen Width of the Device.
-        let windowHeight = window.screen.height;//Get Max Screen Height of the Device.
-        document.getElementById("drag-container").style.minHeight = (windowHeight * .56) + "px";
-        let cardWidth = document.getElementById(this.dragCard.id).offsetWidth;
-        let cardHeight = document.getElementById(this.dragCard.id).offsetHeight;
-
-        /*
-        //Restrict drag() going left-outside of the <drag-container>.
-        //If the Selected Element left-side (this.currentX) reaches the left-end of the <drag-container>(0px).
-        if (this.currentX < 0) {//If left-side <DragCard> reaches -1.
-            this.active = false;//Disable: Click/Touch from drag(event).
-            this.currentX = Math.abs(this.currentX);//<DragCard> this.currentX = |-1|. Reset Left-Coordinates.
-            this.xOffset = Math.abs(this.currentX);//<DragCard> this.xOffset = |-1|. Assign Left-Offset Coordinates to avoid confusion to the program.
-            this.setTranslate(this.currentX, this.currentY, this.dragCard);//Set Positive this.currentX coordinates to this.dragCard.
-        }//Restrict drag() going above-outside the <drag-container>.
-        //If the Selected Element reaches top of the <drag-container>.        
-        if (this.currentY < 0) {//If top-side of <DragCard> reaches -1.
-            this.active = false;//Disable: Click/Touch from drag(event).
-            this.currentY = Math.abs(this.currentY) + 10;//<DragCard> this.currentY = |-1|.
-            this.yOffset = Math.abs(this.currentY) + 10;//<DragCard> this.yOffset = |-1|.
-            this.setTranslate(this.currentX, this.currentY, this.dragCard);//Set Positive this.currentY coordinates to this.dragCard.
-        }//Restrict drag() going right-outside the <drag-container>.        
-        //If the Selected Element reaches right-side (this.currentX) reaches endless-space.
-        if (this.currentX >= this.container.clientWidth - cardWidth) {
-            this.active = false;//Disable: Click/Touch from drag(event).
-            this.dragCard.style.display = "none";//Hide (this.dragCard = <.dragcard>) from the Client.
-            //document.getElementById("app-menu-btns").innerHTML = '<button type="button" class="list-group-item list-group-item-action">DragCard</button>';
-        }//Restrict drag() going bottom-outside the <drag-container>.
-        //If the Selected Element reaches right-side (this.currentY) reaches bottom-end of the <drag-container>(max(heigth)).
-        if (this.currentY >= this.container.clientHeight - cardHeight) {
-            this.active = false;//Disable: Click/Touch from drag(event).
-            this.dragCard.style.display = "none";//Hide (this.dragCard = <.dragcard>) from the Client.
-            //document.getElementById("app-menu-btns").innerHTML = '<button type="button" class="list-group-item list-group-item-action">DragCard</button>';
-        }
-        */
-
-
-
-
-        //Original Code
-        //On MouseMove(mouse-over) / TouchStart (screens) in this.container = <#drag-container> While MouseDown on this.dragcard<.drag card>
-        if (this.active) {//Listening for a MouseDown on a Card.
-            event.preventDefault();
-            if (event.type === "touchmove") {
-                this.currentX = event.touches[0].clientX - this.initialX;
-                this.currentY = event.touches[0].clientY - this.initialY;
-            } else {
-                this.currentX = event.clientX - this.initialX;
-                this.currentY = event.clientY - this.initialY;
-            }
-
-            this.xOffset = this.currentX;
-            this.yOffset = this.currentY;
-
-            this.setTranslate(this.currentX, this.currentY, this.dragCard);//Save Coordinates before MouseUp.Event().
-        }//End Active Mouse-Click
-
-
-
+        //This is dragStart() and drag() operations by having the User MouseDown/TouchStart using this.active = true status.
+        if (Card.prototype.active) {//When Application is now Active for the drag. MouseDown/TouchStart on .this.dragCard <class=drag card id#foo>.
+            Card.prototype.isMoving();//Record Card Coordinates while active/dragging is happening to this.cardObj.
+        }//End when user mouse-ups/touch-up.
 
     }
     //…a drag operation ends (such as releasing a mouse button or hitting the Esc key)
     dragEnd() {
         console.log("DragEnd()");
 
-        console.log("curX: " + this.currentX);
-        console.log("curY: " + this.currentY);
-        console.log("iniX: " + this.initialX);
-        console.log("iniY: " + this.initialY);
-        console.log("offX: " + this.xOffset);
-        console.log("offY: " + this.yOffset);
-
-        //Original Code (Save Last X/Y Coords to Initial)
-        this.initialX = this.currentX;
-        this.initialY = this.currentY;
-        this.active = false;//Disable: Click/Touch from drag(event).
-        this.dragCard.style.zIndex = "0";
+        //Save and Recycle Class Property Values. User has Finished Dragging by now.
+        Card.prototype.hasStopped();//Card has Stopped recording coorindates.
     }
     //…a dragged item enters a valid drop target.
     dragEnter() {
@@ -137,54 +68,38 @@
         console.log("dragOver()");
     }
     //…the user starts dragging an item.
-    dragStart() {
-        console.log("DragStart()");
-        //User has "MouseDownClick/TouchStart" on the Screen.
-        this.getSelectedDragCard(event.target.id);//Update Class Properties based on the ID of <.drag .card>
+    dragStart() {//User MouseDown/TouchStart on a <.drag card>.
+        //console.log("DragStart()");
 
-        //Original Code has to be Last in this Code Block.
-        //Original Code for 1 Card: Index for InitialX/Y and a Class Permission Property Bool.
-        if (event.type === "touchstart") {//Screen-Touch Event
-            this.initialX = event.touches[0].clientX - this.xOffset;
-            this.initialY = event.touches[0].clientY - this.yOffset;
-        } else {//Computer-Mouse Event
-            this.initialX = event.clientX - this.xOffset;
-            this.initialY = event.clientY - this.yOffset;
-        }
-        //Class Permission Property(bool) for allowing this.dragCard to move on (mouse+click)
-        if (event.target === this.dragCard) {//mouse or touch browser-event when event obj and our class obj matches. Example: if(this.dragCard == <.drag card #id>)
-            this.active = true;//Change Class Permission.
-        }
-        //End Original Code.
-        //
+        /*User Interacts by (Mouse or Touch Screen) = (event.target).*/        
+        Card.prototype.getSelectedCardByEventId();//Get Card Obj based on <.drag ID>.
+
+        /*
+        console.log("clickEvent");
+
+        console.log("ecX:-match" + event.clientX);//Double Click/Tap
+        console.log("ecY:-match" + event.clientY);//Double Click/Tap
+        console.log("inX:-match" + this.initialX);//Double Click/Tap
+        console.log("inY:-match" + this.initialY);//Double Click/Tap
+
+        console.log("elY:" + event.layerY);
+        console.log("crY:" + this.currentY);
+
+        console.log("elX:" + event.layerX);
+        console.log("crX:" + this.currentX);
+
+        console.log("etcW:" + event.target.clientWidth);
+        console.log("etcH:" + event.target.clientHeight);
+        */
     }
     //…an item is dropped on a valid drop target.
     drop() {
         console.log("dragDrop()");
     }
-    //Update CSS-Coordinate Class Properties when MouseDown/TouchStart Event happens in the this.container.
-    getSelectedDragCard(id) {//When MouseDown/TouchStart Begins in dragStart()...
-        this.dragCard = document.querySelector("#" + id);//get (html-obj) from the browser and set this.dragCard Property.
-        let str = this.dragCard.style.transform;//Check transform property. Example "translate3d(454px, 90px, 0px)".
-        let n = str.indexOf("(");//Get String-Index Position of (
-        let m = str.indexOf(")");//Get String-Index Position of )
-        let coords = str.substring(n + 1, m);//Get subString in between (). Example "454px, 90px, 0px".
-        let coord = coords.split("px,");//Remove px from the string, and turn string into an object.
-        this.currentX = coord[0];//coord[x]; 454(px) Update X coordinate for this.currentX.
-        this.currentY = coord[1];//coord[y]; 90(px) Update Y coordinate for this.currentY.
-        this.xOffset = this.currentX;//Copying Offset Calculation
-        this.yOffset = this.currentY;//Copying Offset Calculation
-        this.dragCard.style.zIndex = "8";//Z index.
-    }
-    //Smooth Animation Effect using CSS:Transform and X/Y Coordinate plotting UI.
-    setTranslate(xPos, yPos, el) {
-        el.style.transform = "translate3d(" + xPos + "px, " + yPos + "px, 0)";//Acting as a "CSS Address".
-    }
 }
+var DragUIExecute = new DragUI();
 
-var DragCardUIExecute = new DragCardUI();
-
-/* Alternatively: using Arrow Function Expressions Method
+/* Alternatively 1 for this ClassSetup: using Arrow Function Expressions Method
 //Screen Touch Events
 this.container.addEventListener("touchstart", (e) => this.dragStart(e), false);
 this.container.addEventListener("touchend", (e) => this.dragEnd(e), false);
@@ -193,12 +108,13 @@ this.container.addEventListener("touchmove", (e) => this.drag(e), false);
 this.container.addEventListener("mousedown", (e) => this.dragStart(e), false);
 this.container.addEventListener("mouseup", (e) => this.dragEnd(e), false);
 this.container.addEventListener("mousemove", (e) => this.drag(e), false);
-/*Alternatively: ES6 Method Definition Method
+
+/*Alternatively 2 for this ClassSetup: ES6 Method Definition Method
 //Constructor Example
 this.container.addEventListener("mousedown", this.dragStart, false);
 this.container.addEventListener("mouseup", this.dragEnd, false);
 this.container.addEventListener("mousemove", this.drag, false);
-//Method Example
+//Method Examples
 drag = () => {
     console.log("Drag");
 }
@@ -207,6 +123,5 @@ dragStart = () => {
 }
 dragEnd = () => {
     console.log("DragEnd");
-
 }
 */
