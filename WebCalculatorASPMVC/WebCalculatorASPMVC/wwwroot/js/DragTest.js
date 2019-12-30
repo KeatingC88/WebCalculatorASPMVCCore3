@@ -2,12 +2,15 @@
 
     //Container or Object(s). Eventlisteners are binded to this.container. this.container needs to be the (Parent) Element of this.dragcard.
     container = document.querySelector("#drag-container");//Parent Element for the Children Element(s): Drag/DragStart/DragEnd Class Events.
-
+    
     constructor() {
-        
-        //Resize <this.container> every movement inside it. This helps responsive UI for Mousing-Events.
+
+        //Resize <this.container> on PageLoad().
         this.container.style.height = (document.documentElement.clientHeight) + "px";//Adjust Height of this.container (drag-container).
         this.container.style.width = (document.documentElement.clientWidth) + "px";//Adjust Width of this.container.
+
+        //Set Cards into an array of objects and Set Coordinates for each object.
+        Card.prototype.loadCards();
 
         //Screen Touch Event Listeners.
         this.container.addEventListener("touchstart", this.dragStart.bind(this), false);
@@ -17,30 +20,22 @@
         this.container.addEventListener("mousedown", this.dragStart.bind(this), false);
         this.container.addEventListener("mouseup", this.dragEnd.bind(this), false);
         this.container.addEventListener("mousemove", this.drag.bind(this), false);
-        //this.container.addEventListener("mouseleave", this.dragLeave.bind(this), false);
 
         //User Device Listener (BETA)
         if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             this.userPhoneAgent = navigator.userAgent;
-            console.log("phone/tablet/ipad");
+            Card.prototype.setCardsVertical();
         }//End User Device Listener
 
     }//EndConstructor    
     drag() {//This Method fires while mouse is in <drag-container>.
-
-        //Get Top, Bottom, Left, Right of this.container = <.drag-container>.
-        //Get Top, Bottom, Left, Right of this.dragCard = <.drag-card>.
-        //.dragCard's Width should indicate right side of the card.
-        //.dragCard's Height should indicate bottom side of the card.
-        //this.container's max-width should meet .dragCard's Width for this.active=false;
-        //this.container's max-heigth should meet .dragCard's Heigth for this.active=false;
 
         //Drag will always be firing while mouse is inside <this.container>
         $('#app-menu').collapse('hide');//Collapse <div class="collapse" id="app-menu"> when a user does mouse-move(mouse-over) the <drag-container>.
 
         //This is dragStart() and drag() operations by having the User MouseDown/TouchStart using this.active = true status.
         if (Card.prototype.active) {//When Application is now Active for the drag. MouseDown/TouchStart on .this.dragCard <class=drag card id#foo>.
-            Card.prototype.isMoving();//Record Card Coordinates while active/dragging is happening to this.cardObj.
+            Card.prototype.isMoving();//Record Card Coordinates while active and dragging to this.cardObj.
         }//End when user mouse-ups/touch-up.
 
     }
@@ -50,6 +45,7 @@
 
         //Save and Recycle Class Property Values. User has Finished Dragging by now.
         Card.prototype.hasStopped();//Card has Stopped recording coorindates.
+
     }
     //…a dragged item enters a valid drop target.
     dragEnter() {
@@ -71,8 +67,8 @@
     dragStart() {//User MouseDown/TouchStart on a <.drag card>.
         //console.log("DragStart()");
 
-        /*User Interacts by (Mouse or Touch Screen) = (event.target).*/        
-        Card.prototype.getSelectedCardByEventId();//Get Card Obj based on <.drag ID>.
+        /*User Interacts by (Mouse or Touch Screen) to get this (event.target) by it's ID.*/
+        Card.prototype.getSelectedCard();//Get Card Obj based on <.drag ID>. Should be first method in this Event.
 
         /*
         console.log("clickEvent");
