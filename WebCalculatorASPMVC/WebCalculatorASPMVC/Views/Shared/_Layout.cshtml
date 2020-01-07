@@ -24,7 +24,9 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">            
+    <div id="drop-container" class="text-center" style="min-width: 100%; min-height: 10px;"><p>Drop Zone</p></div>
+
+    <footer class="border-top footer text-muted">
         <div class="pos-f-t">
             <div class="collapse" id="app-menu">
                 <div class="bg-dark p-4">
@@ -42,21 +44,21 @@
                     </div>
                 </div>
             </div>
-            <nav class="navbar navbar-dark bg-dark">
+            <nav class="navbar navbar-dark bg-dark" id="navbar-bottom">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#app-menu" aria-controls="app-menu" aria-expanded="false" aria-label="App Menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
             </nav>
-        </div>            
+        </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/DragTest.js" asp-append-version="true"></script>
-    <script src="~/js/Card.js" asp-append-version="true"></script>
+    <script src="~/js/DragUI/Index.js" asp-append-version="true"></script>
+    <script src="~/js/DragUI/Card/Card.js" asp-append-version="true"></script>
+    <script src="~/js/DragUI/Card/CardService.js" asp-append-version="true"></script>
     <script src="~/js/StandardCalculatorEvents.js" asp-append-version="true"></script>
     <script src="~/js/ScientificCalculatorEvents.js" asp-append-version="true"></script>
-    <script src="~/js/KeyboardEvents.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

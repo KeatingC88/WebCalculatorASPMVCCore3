@@ -29,11 +29,13 @@
     constructor() {
         this.keyBoardEventListener();        
     }
+
     /**
      * 
-     * This section handles all OnClick Events from the View (the Index).
+     * This section handles all OnClick Events from the View (the Index for Standard Calculation).
      * 
      */
+
     key(value){
         this.number(value);
         this.decimal(value);
