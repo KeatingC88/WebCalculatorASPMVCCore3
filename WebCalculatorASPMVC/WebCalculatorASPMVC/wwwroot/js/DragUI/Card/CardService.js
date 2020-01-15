@@ -1,52 +1,24 @@
 ﻿class CardService extends Card {
-
+    //Tip: To get the size of an element, use the clientWidth, clientHeight, innerWidth, innerHeight, outerWidth, outerHeight, offsetWidth and/or offsetHeight properties.
     constructor() {
         super();
         this.setCoordinatesOnAllCards();
     }
-
-    draggingSelectedCard() {
-        
-    }
-
-    getSelectedCardSize() {
-        if (this.cardObj !== undefined) {
-            Card.prototype.cardWidth = document.getElementById(this.cardId).offsetWidth;
-            Card.prototype.cardHeight = document.getElementById(this.cardId).offsetHeight;
-            Card.prototype.cardArea = document.getElementById(this.cardId).offsetWidth * document.getElementById(this.cardId).offsetHeight;
+    setCoordinatesOnAllCards() {
+        let cards = document.getElementsByClassName("drag");
+        for (let i = 0; i < cards.length; i++) {
+            this.setTranslate(0, 0 + (i * 10), cards[i]);//Vertical Load.
         }
     }
-
-    setStyleBoxShadowOnAllCards() {
-        let cards = document.getElementsByClassName("drag");//
-        for (var i = 0; i < cards.length; i++) {
-            cards[i].style.boxShadow = "initial";
-        }
-        document.getElementById(this.cardId).style.boxShadow = "0px 0px 10px black";
+    setSelectedDesign() {
+        this.setStyleZIndexOnAllCards();
     }
-
     setStyleZIndexOnAllCards() {
-        let cards = document.getElementsByClassName("drag");//
+        let cards = document.getElementsByClassName("drag");
         for (var i = 0; i < cards.length; i++) {
             cards[i].style.zIndex = "0";
         }
         document.getElementById(this.cardId).style.zIndex = "2";
-    }
-    
-    setSelectedCardDesign() {
-        if (this.cardObj !== undefined) {
-            //...
-            this.setStyleBoxShadowOnAllCards();
-            this.setStyleZIndexOnAllCards();
-            //...
-        }
-    }
-
-    setCoordinatesOnAllCards() {
-        let cards = document.getElementsByClassName("drag");//
-        for (let i = 0; i < cards.length; i++) {
-            this.setTranslate(0, 0 + (i * 85), cards[i]);//Vertical Load.
-        }
     }
 }
 

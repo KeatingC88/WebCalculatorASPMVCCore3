@@ -1,60 +1,39 @@
 ﻿class Card extends DragUI {
 
-    //Required: Dynamically Card Changing Properties.
-    cardId;//The Event.Target.ID from a <Class="drag"> and <ID=(Event.Target.ID)> therefore the SelectedCard ID.
-    cardObj;//The SelectedCard<.drag id=(event.target.id)> itself.
-
-    //Required: Positioning
+    cardId;//The Event.Target.ID from a <Class="drag"> and <ID=(Event.Target.ID)> therefore the Element's ID.
+    cardObj;//The <.drag id=(event.target.id)>.
     currentX = 0;//<.drag card> left(top-of-element) X Coordinates
     currentY = 0;//<.drag card> top(left-of-element) Y Coordinates
     initialX = 0;//(Mouse Pointer) X Coordinates
     initialY = 0;//(Mouse Pointer) Y Coordinates
-    xOffset = 0;//
-    yOffset = 0;//
-    active = false;//User has MouseDown <.drag #ID>
-
-    //Optional: Sizing
+    xOffset = 0;//<.drag card> left(top-of-element) offSet X Coordinates
+    yOffset = 0;//<.drag card> top(left-of-element) offSet Y Coordinates
+    active = false;//True if the User has MouseDown an <.drag #ID>
     cardHeight;//L
     cardWidth;//W
     cardArea;//A
+    cardDisplay;
 
     constructor() {
         super();
     }
-    //Class Index
-    getSelectedCard() {//On DragStart(MouseDown/TouchStart)
-        this.getSelectedCardByEventId();//Get Required <#id=ElementID> by (MouseDown/TouchStart Event) and check for <classname>="drag".                
-        this.getSelectedCardCoordinates();//Get Required Element Coordinates.
-        this.setSelectedCardClassProperties();//Set Class Properities just before record any movement coordinates.
-        //...
-        CardService.prototype.getSelectedCardSize();//Get Element Size.
-        CardService.prototype.setSelectedCardDesign();//Set Element Design.
-        //...
-    }
-    //Get and use the Event.Id for Class Properties "this.cardId and this.cardObj"
-    getSelectedCardByEventId() {
-        if (event.target.getAttribute("class") !== null) {//Get MouseDown/TouchStart Element ClassNames.
-            let eventAttributes = event.target.getAttribute("class").split(" ");//get event.target attribute names into eventAttributes.
-            const findClassNameDrag = (element) => element === "drag";//search in the Mouse/Touch Event.Target class attribute names for this.cardTag.
-            if (eventAttributes.findIndex(findClassNameDrag) === 0) {//If "drag" exists as a classname and event.target.id exists for this.dragCard.id. Proceed.
-                this.cardId = event.target.id;//Assign Event ID to this.cardID.
-                return this.cardObj = document.querySelector("#" + event.target.id);//Assign the Event.Target object to This.dragCard object.
-            }
+    //Index: User has MouseDown in this.container. event.path[0] is mouse pointer target.
+    getSelectedCard() {//On DragStart(MouseDown/TouchStart),
+        //Check Target Element for a Class and ID.
+        if (event.path[0].getAttribute("class").indexOf("drag") !== -1) {//If the event took place on an element that had the <classname=drag>.
+            this.cardId = event.target.id;//Get Event ID to this.cardId.
+            this.cardObj = document.querySelector("#" + event.target.id);//Get Event Object using the Event ID and set it as our class object.
+        }
+        //Check if Target Element's Parent Element for a Class and ID.
+        if (event.path[1].getAttribute("class").indexOf("drag") !== -1) {//If the event took place on a child element that had the <classname=drag>.
+            this.cardId = event.path[1].getAttribute("id");//Get the Parent's Element ID of the where the event took place.
+            this.cardObj = document.querySelector("#" + event.path[1].getAttribute("id"));//Assign the Event.Target object to This.dragCard object.
+        } 
+        if (event.path[0].getAttribute("id") !== "drag-container") {//This forces the User to click on a valid Element and it's child, or nothing at all.
+            this.setClassProperties();//Set Class Properities just before record any movement coordinates.
         }
     }
-    //Update Class Coordinate Properties when User MouseDown/TouchStart Response.
-    getSelectedCardCoordinates() {
-        let gettingCoords = this.cardObj.style.transform;//Get Element Current Position.
-        //Modify the String to get Coordinates.
-        let start = gettingCoords.indexOf("(");//Get String-Index Position of "(" Example: "translate3d ( 454px, 90px, 0px)".
-        let end = gettingCoords.indexOf(")");//Get String-Index Position of ")" Example: "translate3d(454px, 90px, 0px ) ". 
-        let coords = gettingCoords.substring(start + 1, end);//Get subString in between (). Example "454px, 90px, 0px".
-        let coord = coords.split("px,");//Remove px from the string, and turn string into an object. Example "454, 90".
-        //Set Class Properties w/ pieces from the string.
-        this.currentX, this.xOffset = coord[0];//X 454(px) in example.
-        this.currentY, this.yOffset = coord[1];//Y 90(px) in example.
-    }
-    //Save Class Properties while User MouseDown/MouseMove or TouchStart/TouchMove is taking place.
+    //Save Class Properties while the User's MouseDown/MouseMove or TouchStart/TouchMove is happening.
     isMoving() {
         if (this.active) {//isMoving() is happening when drag() & this.active=true.
             if (event.type === "touchmove") {//Decide if the User has Screen-Touched...
@@ -63,35 +42,45 @@
             } else {//Or the User has Mouse-Clicked...
                 this.currentX = event.clientX - this.initialX;
                 this.currentY = event.clientY - this.initialY;
-            }//User Interaction.
+            }
             this.xOffset = this.currentX;//Save copy Coordinates.
             this.yOffset = this.currentY;//Save copy Coordinates.
             this.setTranslate(this.currentX, this.currentY, this.cardObj);//Save Clientside Coordinates into the css-style-transform of the element.
-            //...
-            CardService.prototype.draggingSelectedCard();
-            //...
         }
     }
     //Save Class Properties and Disconnect Element from Drag().
-    movedFinished() {
-        //...
+    moveFinished() {
         this.initialX = this.currentX;//Save Current Coords
         this.initialY = this.currentY;//Save Current Coords
         this.active = false;//Disconnect User's Click/Touch.
-        //...
     }
     //Update Class Properties.
-    setSelectedCardClassProperties() {//Determine User Action and Set Class Properties.
-        if (event.type === "touchstart") {//User has Screen-Touched...
-            this.initialX = event.touches[0].clientX - this.xOffset;//Create
-            this.initialY = event.touches[0].clientY - this.yOffset;//Create
-        } else {//Or the User has Mouse-Clicked...
-            this.initialX = event.clientX - this.xOffset;//Create
-            this.initialY = event.clientY - this.yOffset;//Create
-        }
-        //Get MouseDown Target matches Class Property.
-        if (event.target === this.cardObj) {
-            this.active = true;//Change this.ClassProperty so this.container.drag() can record coordinates of the actual dragging <element#id>.
+    setClassProperties() {
+        if (this.cardObj !== undefined) {
+
+            let gettingCoords = this.cardObj.style.transform;//Get Element Current Position via String.
+            let start = gettingCoords.indexOf("(");//Get String-Index Position of "(" Example: "translate3d ( 454px, 90px, 0px)".
+            let end = gettingCoords.indexOf(")");//Get String-Index Position of ")" Example: "translate3d(454px, 90px, 0px ) ". 
+            let coords = gettingCoords.substring(start + 1, end);//Get subString in between (). Example "454px, 90px, 0px".
+            let coord = coords.split("px,");//Remove px from the string, and turn string into an object. Example "454, 90".
+
+            this.currentX, this.xOffset = coord[0];//Apply X Coorindates 454(px) in this example.
+            this.currentY, this.yOffset = coord[1];//Apply Y Coorindates 90(px) in this example.
+
+            this.cardWidth = document.getElementById(this.cardId).offsetWidth;//Get
+            this.cardHeight = document.getElementById(this.cardId).offsetHeight;//Get
+            this.cardArea = document.getElementById(this.cardId).offsetWidth * document.getElementById(this.cardId).offsetHeight;//Set
+
+            if (event.type === "touchstart") {//User has Screen-Touched...
+                this.initialX = event.touches[0].clientX - this.xOffset;//Create
+                this.initialY = event.touches[0].clientY - this.yOffset;//Create
+            } else {//Or the User has Mouse-Clicked...
+                this.initialX = event.clientX - this.xOffset;//Create
+                this.initialY = event.clientY - this.yOffset;//Create
+            }
+
+            this.active = true;//Change this.Property so this.container.drag() can record coordinates of the <element#id>.
+            CardService.prototype.setSelectedDesign();//Set the Elemental UI Design.
         }
     }
     //Stamp Coordinates.

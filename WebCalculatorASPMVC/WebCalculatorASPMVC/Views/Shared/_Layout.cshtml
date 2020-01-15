@@ -9,11 +9,10 @@
     <link rel="stylesheet" href="~/css/calculator.css" />
     <link rel="stylesheet" href="~/css/testCS.css" />
 </head>
-<body>
-
+<body onresize="DragUI.prototype.screenListener()">
     <header>
         <h1 class="display-1 text-center">
-            Web Calculator <br />
+            Web App <br />
             <small class="text-muted display-4">ASP.Net Core 3 MVC</small>
         </h1>
     </header>
@@ -23,8 +22,6 @@
             @RenderBody()
         </main>
     </div>
-
-    <div id="drop-container" class="text-center" style="min-width: 100%; min-height: 10px;"><p>Drop Zone</p></div>
 
     <footer class="border-top footer text-muted">
         <div class="pos-f-t">
@@ -54,11 +51,13 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/DragUI/Index.js" asp-append-version="true"></script>
+
+    <script src="~/js/DragUI/DragUI.js" asp-append-version="true"></script>
     <script src="~/js/DragUI/Card/Card.js" asp-append-version="true"></script>
     <script src="~/js/DragUI/Card/CardService.js" asp-append-version="true"></script>
-    <script src="~/js/StandardCalculatorEvents.js" asp-append-version="true"></script>
-    <script src="~/js/ScientificCalculatorEvents.js" asp-append-version="true"></script>
+
+    <script src="~/js/CalculatorUI/StandardCalculator.js" asp-append-version="true"></script>
+    <script src="~/js/CalculatorUI/ScientificCalculator.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
