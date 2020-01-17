@@ -1,35 +1,41 @@
 ﻿class DragUI {
+    /*
+     * How It Works:
+     * 1) Event Listeners are placed in this.container to monitor child elements events such as Mouse/TouchScreen Events.
+     * 2) Class Methods are fired when the DOM fires.
+     * 3) Class Methods are for the various applications needing to utilize Basic Event Listening for Dragging Elements on Phone/Computer.
+     */
     container = document.querySelector("#drag-container");//Call the Parent Element/"this.container" for Child Element(s) to stay and use.
-    constructor() {        
-        if (this.container !== null) {
-            //... Load the Container Size based on screen-size and the Events to Monitor in this.container.
-            this.container.style.height = "500px";//Adjust Height of this.container (drag-container).
-            this.container.style.width = (document.documentElement.clientWidth) + "px";//Adjust Width of this.container.                        
-            //Load Mouse/Device Event Listeners (These also work in Safari Mobile iOS).
-            this.container.addEventListener("mousedown", this.dragStart.bind(this), false);
-            this.container.addEventListener("mouseup", this.dragEnd.bind(this), false);
-            this.container.addEventListener("mousemove", this.drag.bind(this), false);
-            this.container.addEventListener("mouseout", this.dragExit.bind(this), false);
-            this.container.addEventListener("mouseleave", this.dragLeave.bind(this), false);
-            this.container.addEventListener("mouseover", this.dragOver.bind(this), false);
-            this.container.addEventListener("mouseenter", this.dragEnter.bind(this), false);
-            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {//If Mobile Device.
-                this.userPhoneAgent = navigator.userAgent;//Load the Mobile/Device Event Listener.                
-                this.container.addEventListener("touchstart", this.dragStart.bind(this), false);
-                this.container.addEventListener("touchend", this.dragEnd.bind(this), false);
-                this.container.addEventListener("touchmove", this.drag.bind(this), false);
+    constructor() {
+        if (this.container !== null) {//Is there a container
+
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {//If Mobile Device set Screen Listeners.
+                this.userPhoneAgent = navigator.userAgent;//Load the Device Agent Listener.                
+                this.container.addEventListener("touchstart", this.dragStart.bind(this), false);//Touch should work on every browser/device.
+                this.container.addEventListener("touchend", this.dragEnd.bind(this), false);//Fires on finger up.
+                this.container.addEventListener("touchmove", this.drag.bind(this), false);//Missing Touchcancel listener.
+            } else {//Else Set Mouse Listeners
+                this.container.addEventListener("mousedown", this.dragStart.bind(this), false);//Mouse Listeners work on evet browser.
+                this.container.addEventListener("mouseup", this.dragEnd.bind(this), false);
+                this.container.addEventListener("mousemove", this.drag.bind(this), false);
+                this.container.addEventListener("mouseout", this.dragExit.bind(this), false);
+                this.container.addEventListener("mouseleave", this.dragLeave.bind(this), false);
+                this.container.addEventListener("mouseover", this.dragOver.bind(this), false);
+                this.container.addEventListener("mouseenter", this.dragEnter.bind(this), false);
             }
+
+            this.container.addEventListener("resize", this.screenListener.bind(this), false);
         }
     }
     //User has MouseMoved/TouchStart in this.container (doesn't include mouseDown/Touch).
     drag() {
         event.preventDefault();
-        $('#app-menu').collapse('hide');//Collapse Navbar when a user MouseMove/TouchStart into this.container.
-        Card.prototype.isMoving();//User is Dragging the Element by TouchDown+TouchMove or MouseDown+MouseMove.
+        //$('#app-menu').collapse('hide');//Collapse Navbar when a user MouseMove/TouchStart into this.container.
+        Card.prototype.moving();//User is Dragging the Element by TouchDown+TouchMove or MouseDown+MouseMove.
     }
     //User has Mouseup/TouchEnd in this.container from an <class=drag>.
     dragEnd() {
-        Card.prototype.moveFinished();//Record-Save the Selected Information.
+        Card.prototype.dropped();//Record-Save the Selected Information.
     }
     //User has MouseMoved that enters this.container.
     dragEnter() {
@@ -57,15 +63,8 @@
     }
     //User has Zoomed in or out of the screen.
     screenListener() {
-        
-        let container = document.getElementById("drag-container");
-        container.style.width = (document.documentElement.clientWidth) + "px";//Adjust Width of this.container.
-        container.style.height = (document.documentElement.clientHeight) + "px";//Adjust Height of this.container.
-
-        console.log(container);
-        console.log(container.clientWidth);
-        console.log(container.clientHeight);
-        
+        this.container.style.width = (document.documentElement.clientWidth) + "px";//Adjust Width of this.container.
+        this.container.style.height = (document.documentElement.clientHeight) + "px";//Adjust Height of this.container.
     }
 }
 var DragUIExe = new DragUI();

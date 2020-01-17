@@ -4,34 +4,31 @@
 .btn {
     width: 100%;
 }
-/*Default CSS for Mobile Viewport*/
-#calculator-keypad, #sci-calculator-keypad {
+/*Keypad Background Cover*/
+#sta-calculator-keypad-card-body, #sci-calculator-keypad-card-body {
     margin: auto;
+    max-height: 206px;
     background-color: #6c757d;
 }
-/*Keypad Background Cover*/
-#calculator-keypad-card-body, #sci-calculator-keypad-card-body {
-    max-height: 206px;
-}
 /*Keypad Enter Button*/
-#calculator-enter-btn, #sci-calculator-enter-btn {
+#sta-calculator-enter-btn, #sci-calculator-enter-btn {
     width: 100%;
     height: 84px;
     border-bottom-left-radius: 0px;
 }
 /*Keypad One Button Style and Layout*/
-#calculator-one-btn, #sci-calculator-one-btn {
+#sta-calculator-one-btn, #sci-calculator-one-btn {
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
     width: 100%;
 }
 /*Keypad Two Button Style and Layout*/
-#calculator-two-btn, #sci-calculator-two-btn {
+#sta-calculator-two-btn, #sci-calculator-two-btn {
     border-bottom-right-radius: 0px;
     border-bottom-left-radius: 0px;
 }
 /*Keypad Zero Button Style and Layout*/
-#calculator-zero-btn, #sci-calculator-zero-btn {
+#sta-calculator-zero-btn, #sci-calculator-zero-btn {
     position: relative;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -41,13 +38,13 @@
     bottom: 42px;
 }
 /*Keypad Decimal Button Style and Layout*/
-#calculator-decimal-btn, #sci-calculator-decimal-btn {
+#sta-calculator-decimal-btn, #sci-calculator-decimal-btn {
     width: 41px;
     height: 42px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
 /*Keypad Addition Operation Button Style and Layout*/
-#calculator-addition-btn, #sci-calculator-addition-btn {
+#sta-calculator-addition-btn, #sci-calculator-addition-btn {
     height: 82.9px;
 }

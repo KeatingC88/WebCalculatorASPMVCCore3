@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en" id="html-element">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="~/css/calculator.css" />
     <link rel="stylesheet" href="~/css/testCS.css" />
 </head>
-<body onresize="DragUI.prototype.screenListener()">
+<body id="drag-container">
+
     <header>
         <h1 class="display-1 text-center">
             Web App <br />
@@ -17,7 +18,7 @@
         </h1>
     </header>
 
-    <div class="container-fluid">
+    <div class="container-fluid" >
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -51,11 +52,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-
     <script src="~/js/DragUI/DragUI.js" asp-append-version="true"></script>
     <script src="~/js/DragUI/Card/Card.js" asp-append-version="true"></script>
     <script src="~/js/DragUI/Card/CardService.js" asp-append-version="true"></script>
-
     <script src="~/js/CalculatorUI/StandardCalculator.js" asp-append-version="true"></script>
     <script src="~/js/CalculatorUI/ScientificCalculator.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

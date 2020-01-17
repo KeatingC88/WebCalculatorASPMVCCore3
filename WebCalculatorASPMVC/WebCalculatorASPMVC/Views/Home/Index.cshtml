@@ -4,226 +4,198 @@
 <style>
     /*Default CSS for Larger Viewports over 768px (Why doesn't this work in Calculator-keypad.css File????)*/
     @@media (min-width: 768px) {
-        #calculator-card-body, #sci-calculator-card-body {
+        #sta-calculator-card-body, #sci-calculator-card-body {
             max-height: 234.5px !important;
         }
 
-        #calculator-enter-btn, #sci-calculator-enter-btn {
+        #sta-calculator-enter-btn, #sci-calculator-enter-btn {
             height: 93.5px !important;
         }
 
-        #calculator-zero-btn, #sci-calculator-zero-btn {
+        #sta-calculator-zero-btn, #sci-calculator-zero-btn {
             width: 92px !important;
             bottom: 47px !important;
             height: 46.5px !important;
         }
 
-        #calculator-decimal-btn, #sci-calculator-decimal-btn {
+        #sta-calculator-decimal-btn, #sci-calculator-decimal-btn {
             height: 46.6px;
-            width: 44px;
+            width: 45px;
+            position: relative;
+            bottom: 1px;
         }
 
-        #calculator-addition-btn, #sci-calculator-addition-btn {
+        #sta-calculator-addition-btn, #sci-calculator-addition-btn {
             height: 94.9px;
         }
     }
 </style>
 <div class="row justify-content-md-center">
-    <div class="col" id="drag-container">
-        <!--Next Card-->
-        <div class="drag card" style="margin: auto; max-width: 200px;" id="drag-calculator">
-            <div class="card-header p-0">
-                <div class="btn-toolbar float-left" role="toolbar" aria-label="Calculator Menu Button">
-                    <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#calculator-menu">Menu</button>
-                </div>
-                <div class="btn-toolbar float-right" role="toolbar" aria-label="Calculator Menu Buttons">
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Right Side Window-Buttons-Group">
-                        <button type="button" class="btn btn-secondary">_</button>
-                        <button type="button" class="btn btn-secondary">X</button>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body p-0">
-                <div class="row justify-content-md-center">
-                    <div class="col">
-                        <div class="tab-content">
-                            <div class="tab-pane fade show active" id="cal-standard" role="tabpanel" aria-labelledby="cal-standard-tab">
-                                <div class="row justify-content-md-center">
-                                    <div class="col">
-                                        <form>
-                                            <div class="card" style="margin: auto;" id="calculator">
-                                                <div class="card">
-                                                    <div class="card-body p-1" id="calculator-display">
-                                                        <div class="form-group mb-1 mt-1">
-                                                            <textarea class="form-control" id="standard-calculator-textarea-display" rows="1" style="resize: none;" readonly></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card border-0" id="calculator-keypad">
-                                                    <div class="card-body p-0" id="calculator-keypad-card-body">
-                                                        <div class="row">
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.clearDisplay()">C</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(7)">7</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(4)">4</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(1)" id="calculator-one-btn">1</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key('/')">/</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(8)">8</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(5)">5</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(2)" id="calculator-two-btn">2</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key('*')">*</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(9)">9</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(6)">6</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key(3)">3</button>
-                                                                    <button type="button" class="btn btn-secondary btn-lg" onclick="standard.key('.')" id="calculator-decimal-btn">.</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key('-')">-</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key('+')" id="calculator-addition-btn">+</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="standard.key('=')" id="calculator-enter-btn">E</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <button type="button" class="btn btn-secondary btn-lg" onclick="standard.key(0)" id="calculator-zero-btn">0</button>
-                                                        </div>
-                                                    </div><!--Keypad Card-Body-->
-                                                </div><!--Keypad Card-->
-                                            </div><!--Calculator Card-->
-                                        </form>
-                                    </div><!--col-->
-                                </div><!--row-->
-                            </div><!--Standard-Tab-->
-                            <div class="tab-pane fade" id="cal-scientific" role="tabpanel" aria-labelledby="cal-scientific-tab">
-                                <div class="row justify-content-md-center">
-                                    <div class="col">
-                                        <form>
-                                            <div class="card" style="margin: auto;" id="sci-calculator">
-                                                <div class="card">
-                                                    <div class="card-body p-1" id="sci-calculator-display">
-                                                        <div class="form-group mb-1 mt-1">
-                                                            <textarea class="form-control" id="scientific-calculator-textarea-display" rows="1" style="resize: none;" readonly></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card border-0" id="sci-calculator-keypad">
-                                                    <div class="card-body p-0" id="sci-calculator-keypad-card-body">
-                                                        <div class="row">
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('(')">(</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('^')">^</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(')')">)</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('<-')">&lt;-</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(7)">7</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(4)">4</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(1)" id="sci-calculator-one-btn">1</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
+    <div class="col">
 
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientificCalculator.clearDisplay()">CE</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(8)">8</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(5)">5</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(2)" id="sci-calculator-two-btn">2</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 5">
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientificCalculator.clearDisplay()">C</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(9)">9</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(6)">6</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(3)">3</button>
-                                                                    <button type="button" class="btn btn-secondary btn-lg" onclick="scientific.key('.')" id="sci-calculator-decimal-btn">.</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 6">
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('+/-')">&plusmn;</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('/')">/</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('*')">*</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('-')">-</button>
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('+')" id="sci-calculator-addition-btn">+</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col p-0">
-                                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 7">
-                                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('=')" id="sci-calculator-enter-btn">E</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <button type="button" class="btn btn-secondary btn-lg" onclick="scientific.key(0)" id="sci-calculator-zero-btn">0</button>
-                                                        </div>
-                                                    </div><!--Keypad Card-Body-->
-                                                </div><!--Keypad Card-->
-                                            </div><!--Calculator Card-->
-                                        </form>
-                                    </div><!--col-->
-                                </div><!--row-->
-                            </div><!--Scientific-Tab-->
-                        </div><!--tab-content-->
-                    </div><!--col-->
-                </div><!--row-->
-            </div><!--card-body-->
-        </div><!--card--><!--DragUI card-->
         <!--Next Card-->
-    </div><!--col--><!--DragUI container-->
-    <div class="modal fade" id="calculator-menu" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Calculator Settings</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col">
-                            <ul class="nav nav-pills nav-fill mb-3" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-item" id="standard-calculator-navbtn"
-                                       data-toggle="tab" href="#cal-standard" role="tab" aria-controls="cal-standard" aria-selected="true">
-                                        Standard
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link dropdown-item" id="scientific-calculator-navbtn"
-                                       data-toggle="tab" href="#cal-scientific" role="tab" aria-controls="cal-scientific" aria-selected="false">
-                                        Scientific
-                                    </a>
-                                </li>
-                            </ul><!--ul-->
-                        </div>
+        <div class="drag card" id="calculator">
+            <div class="card-header p-1">
+
+                <div class="btn-toolbar float-right" role="toolbar" aria-label="Window-Buttons">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Right Side Window-Buttons-Group">
+
+                        <button type="button" class="btn btn-secondary" onclick="Card.prototype.maximize()">||</button>
+                        <button type="button" class="btn btn-secondary" onclick="Card.prototype.minimize()">_</button>
+                        <button type="button" class="btn btn-secondary" onclick="Card.prototype.close()">X</button>
+
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
+
             </div>
-        </div>
-    </div>
+            <div class="card-body p-0 mb-0 mb-md-5">
+                <ul class="nav nav-pills nav-fill mb-3" role="tablist">
+
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-item active" id="standard-calculator-navbtn"
+                           data-toggle="tab" href="#cal-standard" role="tab" aria-controls="cal-standard" aria-selected="true">
+                            Standard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-item" id="scientific-calculator-navbtn"
+                           data-toggle="tab" href="#cal-scientific" role="tab" aria-controls="cal-scientific" aria-selected="false">
+                            Scientific
+                        </a>
+                    </li>
+
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" role="tabpanel" aria-labelledby="cal-standard-tab" id="cal-standard">
+                        <form>
+                            <div class="card border-0" style="margin: auto;" id="sta-calculator">                                
+                                <div class="card-header p-1" id="sta-calculator-display">
+                                    <div class="form-group mb-1 mt-1">
+                                        <textarea class="form-control" id="standard-calculator-textarea-display" rows="1" style="resize: none;" readonly></textarea>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0" id="sta-calculator-keypad-card-body">
+                                    <div class="row">
+                                        <div class="col p-0">
+                                            <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
+                                                <button type="button" class="btn btn-secondary" onclick="standard.clearDisplay()">C</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(7)">7</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(4)">4</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(1)" id="sta-calculator-one-btn">1</button>
+                                            </div>
+                                        </div>
+                                        <div class="col p-0">
+                                            <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key('/')">/</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(8)">8</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(5)">5</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(2)" id="sta-calculator-two-btn">2</button>
+                                            </div>
+                                        </div>
+                                        <div class="col p-0">
+                                            <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key('*')">*</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(9)">9</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(6)">6</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key(3)">3</button>
+                                                <button type="button" class="btn btn-secondary btn-lg" onclick="standard.key('.')" id="sta-calculator-decimal-btn">.</button>
+                                            </div>
+                                        </div>
+                                        <div class="col p-0">
+                                            <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key('-')">-</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key('+')" id="sta-calculator-addition-btn">+</button>
+                                                <button type="button" class="btn btn-secondary" onclick="standard.key('=')" id="sta-calculator-enter-btn">E</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button type="button" class="btn btn-secondary btn-lg" onclick="standard.key(0)" id="sta-calculator-zero-btn">0</button>
+                                    </div>
+                                </div><!--Keypad Card-Body-->
+                            </div><!--Calculator Card-->
+                        </form>
+                    </div><!--Standard-Tab-->
+                    <div class="tab-pane fade" id="cal-scientific" role="tabpanel" aria-labelledby="cal-scientific-tab">
+                        <form>
+                            <div class="card" style="margin: auto;" id="sci-calculator">
+                                <div class="card">
+                                    <div class="card-body p-1" id="sci-calculator-display">
+                                        <div class="form-group mb-1 mt-1">
+                                            <textarea class="form-control" id="scientific-calculator-textarea-display" rows="1" style="resize: none;" readonly></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card border-0" id="sci-calculator-keypad">
+                                    <div class="card-body p-0" id="sci-calculator-keypad-card-body">
+                                        <div class="row">
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 1">
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('(')">(</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('^')">^</button>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 2">
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(')')">)</button>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 3">
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('<-')">&lt;-</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(7)">7</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(4)">4</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(1)" id="sci-calculator-one-btn">1</button>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 4">
+
+                                                    <button type="button" class="btn btn-secondary" onclick="scientificCalculator.clearDisplay()">CE</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(8)">8</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(5)">5</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(2)" id="sci-calculator-two-btn">2</button>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 5">
+                                                    <button type="button" class="btn btn-secondary" onclick="scientificCalculator.clearDisplay()">C</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(9)">9</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(6)">6</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key(3)">3</button>
+                                                    <button type="button" class="btn btn-secondary btn-lg" onclick="scientific.key('.')" id="sci-calculator-decimal-btn">.</button>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 6">
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('+/-')">&plusmn;</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('/')">/</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('*')">*</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('-')">-</button>
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('+')" id="sci-calculator-addition-btn">+</button>
+                                                </div>
+                                            </div>
+                                            <div class="col p-0">
+                                                <div class="btn-group-vertical btn-group-lg" role="group" aria-label="Calculator Keypad Column 7">
+                                                    <button type="button" class="btn btn-secondary" onclick="scientific.key('=')" id="sci-calculator-enter-btn">E</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <button type="button" class="btn btn-secondary btn-lg" onclick="scientific.key(0)" id="sci-calculator-zero-btn">0</button>
+                                        </div>
+                                    </div><!--Keypad Card-Body-->
+                                </div><!--Keypad Card-->
+                            </div><!--Calculator Card-->
+                        </form>
+                    </div><!--Scientific-Tab-->
+
+                </div><!--tab-content-->
+            </div><!--card-body-->
+        </div><!--card-->
+        <!--Next Card-->
+
+    </div><!--col-->
 </div><!--row-->
 
 <!--https://stackoverflow.com/questions/10894638/how-to-set-cursor-to-input-box-in-javascript-->

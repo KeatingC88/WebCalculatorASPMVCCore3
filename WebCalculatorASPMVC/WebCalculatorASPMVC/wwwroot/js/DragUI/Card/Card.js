@@ -17,24 +17,50 @@
     constructor() {
         super();
     }
+    //Hide Element and Store an LI into Navbar.
+    close() {
+        if (this.cardObj !== undefined) {
+            document.getElementById(this.cardId).style.display = "none";
+            document.getElementById("app-menu-btns").innerHTML =
+                "<li class='list-group-item list-group-item-success'>" + this.cardId + "</li>";
+        } else {
+            this.getSelectedCard();
+        }
+    }
     //Index: User has MouseDown in this.container. event.path[0] is mouse pointer target.
     getSelectedCard() {//On DragStart(MouseDown/TouchStart),
-        //Check Target Element for a Class and ID.
+
+        console.log(event.path[0]);
+        console.log(event.path[1]);
+        console.log(event.path[2]);
+        console.log(event.path[3]);
+        console.log(event.path[4]);
+        console.log(event.path[5]);
+
         if (event.path[0].getAttribute("class").indexOf("drag") !== -1) {//If the event took place on an element that had the <classname=drag>.
             this.cardId = event.target.id;//Get Event ID to this.cardId.
             this.cardObj = document.querySelector("#" + event.target.id);//Get Event Object using the Event ID and set it as our class object.
         }
-        //Check if Target Element's Parent Element for a Class and ID.
-        if (event.path[1].getAttribute("class").indexOf("drag") !== -1) {//If the event took place on a child element that had the <classname=drag>.
-            this.cardId = event.path[1].getAttribute("id");//Get the Parent's Element ID of the where the event took place.
-            this.cardObj = document.querySelector("#" + event.path[1].getAttribute("id"));//Assign the Event.Target object to This.dragCard object.
-        } 
+
+        if (event.path[1].getAttribute("class") !== null) {
+            if (event.path[1].getAttribute("class").indexOf("drag") !== -1) {//If the event took place on a child element that had the <classname=drag>.
+                this.cardId = event.path[1].getAttribute("id");//Get the Parent's Element ID of the where the event took place.
+                this.cardObj = document.querySelector("#" + event.path[1].getAttribute("id"));//Assign the Event.Target object to This.dragCard object.
+            }
+        }
+        
+        if (event.path[4].getAttribute("class").indexOf("drag") !== -1) {
+            this.cardId = event.path[4].getAttribute("id");//Get the Parent's Element ID of the where the event took place.
+            this.cardObj = document.querySelector("#" + event.path[4].getAttribute("id"));//Assign the Event.Target object to This.dragCard object.
+        }
+        
         if (event.path[0].getAttribute("id") !== "drag-container") {//This forces the User to click on a valid Element and it's child, or nothing at all.
             this.setClassProperties();//Set Class Properities just before record any movement coordinates.
         }
+
     }
     //Save Class Properties while the User's MouseDown/MouseMove or TouchStart/TouchMove is happening.
-    isMoving() {
+    moving() {
         if (this.active) {//isMoving() is happening when drag() & this.active=true.
             if (event.type === "touchmove") {//Decide if the User has Screen-Touched...
                 this.currentX = event.touches[0].clientX - this.initialX;
@@ -49,10 +75,26 @@
         }
     }
     //Save Class Properties and Disconnect Element from Drag().
-    moveFinished() {
+    dropped() {
         this.initialX = this.currentX;//Save Current Coords
         this.initialY = this.currentY;//Save Current Coords
         this.active = false;//Disconnect User's Click/Touch.
+    }
+    //Show Body Element
+    maximize() {
+        if (this.cardObj !== undefined) {
+            document.getElementById(this.cardId).lastElementChild.style.display = "initial";
+        } else {
+            this.getSelectedCard();
+        }
+    }
+    //Hide Body Element
+    minimize() {
+        if (this.cardObj !== undefined) {
+            document.getElementById(this.cardId).lastElementChild.style.display = "none";
+        } else {
+            this.getSelectedCard();
+        }
     }
     //Update Class Properties.
     setClassProperties() {

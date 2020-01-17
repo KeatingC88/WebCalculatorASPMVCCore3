@@ -316,7 +316,7 @@
                 break;
             case 8://BackSpace
                 this.clearDisplay();
-                ScientificCalculator.prototype.mathOperation("<-");
+                ScientificCalculator.prototype.operation("<-");
                 break;
         }
 
